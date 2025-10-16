@@ -343,7 +343,7 @@ class Rars:
                 # -- No es obligatorio que tengo segmento de datos
                 print("> ☑️ ", end='')
 
-            print(f"Hay segmento de datos{Rars.DATA}")
+            print("Hay segmento de datos")
 
         # -- NO HAY Segmento de datos
         # -- No tiene por qué ser un error. Depende de si se ha especificado
