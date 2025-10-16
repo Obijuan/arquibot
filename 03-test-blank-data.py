@@ -2,9 +2,9 @@
 from arquibot.rars import Rars
 
 # ───────────────────────────────────────
-# ─── TEST 2: Fichero asm en blanco
-# ─── No hay segmento de codigo
-# ─── No hay segmento de datos
+# ─── TEST 3: Fichero asm con segmento
+# ─── de datos en blanco
+# ─── (es equivalente a si no lo hubiese)
 # ───────────────────────────────────────
 
 # ── Comenzar la comprobación
