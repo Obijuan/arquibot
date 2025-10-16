@@ -474,8 +474,7 @@ class Rars:
     def check_exit():
         # --- Comprobar si el programa no termina de forma controlada
         if "dropping off" in Rars.stderr:
-            print("> ❌️ ERROR: El programa no termina llamando al "
-                  "sistema operativo")
+            Rars.print_error("No hay EXIT")
             Rars.errors = True
 
         # --- Comprobar si el programa termina con normalidad, llamando a EXIT
