@@ -144,11 +144,10 @@ class Rars:
     # ────────────────────────────────────────────────────────────────────────
     def print_error(emsg: str, violation: bool = False):
 
-        print(f"> ❌️ {ansi.RED}ERROR: {ansi.YELLOW}{Rars.MAIN_ASM} "
-              f"{ansi.RED}{emsg}{ansi.DEFAULT}")
+        print(f"> ❌️ {ansi.RED}ERROR: {ansi.LWHITE}{emsg}{ansi.DEFAULT}")
         if violation:
-            print(f"{ansi.LRED}    🔥️VIOLACION DE ESPECIFICACIONES")
-        print()
+            print(f"{ansi.LMAGENTA}     🔥️ VIOLACION DE ESPECIFICACIONES")
+            print(f"{ansi.DEFAULT}", end='', flush=True)
 
     # ──────────────────────────────────────────────────
     # ── EXISTS()  Comprobar si el fichero ejecutable
@@ -230,7 +229,8 @@ class Rars:
         if os.path.exists(Rars.MAIN_ASM):
             print(f"> ✅️ {Rars.MAIN_ASM} existe")
         else:
-            Rars.print_error("no encontrado", violation=True)
+            Rars.print_error(f"{ansi.YELLOW}{Rars.MAIN_ASM}{ansi.LWHITE}"
+                             " no encontrado", violation=True)
             print()
             sys.exit()
 
@@ -340,8 +340,7 @@ class Rars:
 
             # -- El enunciado requiere que HAYA segmento de datos
             if Rars.HAS_DATA:
-                print("> ❌️ ERROR: No hay segmento de datos"
-                      "    🔥️ VIOLACION DE ESPECIFICACIONES")
+                Rars.print_error("No hay segmento de datos", violation=True)
                 Rars.errors = True
 
             # -- No tiene segmento de datos, y el enunciado NO lo requiere
