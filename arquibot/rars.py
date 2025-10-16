@@ -161,7 +161,7 @@ class Rars:
             print("> 🤚 RARS no existe")
             Rars.download()
 
-        print("> ✅️ RARS EXISTE")
+        print("> ☑️  RARS EXISTE")
 
     # ──────────────────────────────────────────────────
     # ── DELETE_DATA.  Borrar el archivo donde esta
