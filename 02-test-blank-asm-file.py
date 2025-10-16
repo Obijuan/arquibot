@@ -11,6 +11,5 @@ from arquibot.rars import Rars
 # Rars("asm/blank.s", expected_data=True)
 Rars("asm/blank.s")
 
-
 # ── Terminar
 Rars.exit()
