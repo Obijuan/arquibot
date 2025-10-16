@@ -385,7 +385,7 @@ class Rars:
         # -- del segmento de codigo. Si no se ha generado es porque
         # -- el programa no tiene la directiva .text
         if os.path.exists(Rars.TEXT):
-            print(f"> ✅️ {Rars.TEXT} generado")
+            print("> ✅️ Hay segmento de código")
             Rars.HAS_TEXT = True
         else:
             Rars.print_error("No hay segmento de CODIGO!", violation=True)
