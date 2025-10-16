@@ -503,12 +503,15 @@ class Rars:
     # ──   * data_ok: Diccionario con las variables y sus valores correctos
     # ──────────────────────────────────────────────────────────────────────
     def check_variables(data_ok: dict):
+
+        print(f"  {ansi.BLUE}──────── Comprobando variables{ansi.DEFAULT}")
+
         i = 0
         for var, value_ok in data_ok.items():
 
             data = Rars.variables[i]
             if data == value_ok:
-                print(f"> ✅️ {var}: {hex(data)}")
+                print(f"> ✅️ {var} = {data} ({hex(data)}) ")
             else:
                 print(f"> ❌️ {var}: {hex(data)}."
                       f"Debería ser: {hex(value_ok)}")
