@@ -38,6 +38,9 @@ class Rars:
     # ── Nombre del fichero MAIN a ensamblar
     MAIN_ASM = "main.s"
 
+    # ── Indicar si el programa debe tener segmento de datos o no
+    HAS_DATA = False
+
     # ── Guardar las salidas del rars y del programa
     # ── Al ejecutar el Rars
     stderr = ""
@@ -58,17 +61,22 @@ class Rars:
     # ── Variables
     variables = []
 
-    # ──────────────────────────────────────────────────
+    # ───────────────────────────────────────────────────────────────────────
     # ── CONSTRUCTOR
     # ── Entradas:
     # ──  * main: Nombre del fichero ensamblador principal
+    # ──  * has_data: Indicar si el programa debe tener segmento de datos
     # ──  * bonus: Numero de instrucciones maximo para conseguir
     # ──           los bonus
-    # ──────────────────────────────────────────────────
-    def __init__(self, main: str, bonus: int = 2):
+    # ───────────────────────────────────────────────────────────────────────
+    def __init__(self,
+                 main: str,
+                 has_data: bool = False,
+                 bonus: int = 2):
 
         # -- Guardar los parametros pasados
         Rars.MAIN_ASM = main
+        Rars.HAS_DATA = has_data
         Rars.bonus = bonus
 
         # ── Mostrar el encabezado
@@ -83,7 +91,7 @@ class Rars:
         Rars.delete_data()
         Rars.delete_text()
 
-        # --- Comprobar si el fichero existe
+        # --- Comprobar si el fichero asm existe
         Rars.check_main_asm()
 
         # -- Ejecutar el Rars!
@@ -126,6 +134,21 @@ class Rars:
 
         # ── Volver a color normal
         print(ansi.DEFAULT, end="")
+
+    # ────────────────────────────────────────────────────────────────────────
+    # ── Imprimir un mensaje de error
+    # ──  ENTRADAS:
+    # ──    * emsg:  Mensaje de error a mostrar
+    # ──    * violation: Indica si mostrar mensaje dicion de violacion de
+    # ──                 especificaciones
+    # ────────────────────────────────────────────────────────────────────────
+    def print_error(emsg: str, violation: bool = False):
+
+        print(f"> ❌️ {ansi.RED}ERROR: {ansi.YELLOW}{Rars.MAIN_ASM} "
+              f"{ansi.RED}{emsg}{ansi.DEFAULT}")
+        if violation:
+            print(f"{ansi.LRED}    🔥️VIOLACION DE ESPECIFICACIONES")
+        print()
 
     # ──────────────────────────────────────────────────
     # ── EXISTS()  Comprobar si el fichero ejecutable
@@ -207,9 +230,7 @@ class Rars:
         if os.path.exists(Rars.MAIN_ASM):
             print(f"> ✅️ {Rars.MAIN_ASM} existe")
         else:
-            print(f"> ❌️ {ansi.RED}ERROR: {ansi.YELLOW}{Rars.MAIN_ASM} "
-                  f"{ansi.RED}no encontrado {ansi.DEFAULT}\n"
-                  f"{ansi.LRED}    🔥️VIOLACION DE ESPECIFICACIONES")
+            Rars.print_error("no encontrado", violation=True)
             print()
             sys.exit()
 
@@ -300,11 +321,32 @@ class Rars:
         # -- de memoria. Si no se ha generado es porque no se ha declaro
         #  el segmento de datos
         if os.path.exists(Rars.DATA):
-            print(f"> ✅️ {Rars.DATA} generado")
+
+            # -- Hay segmento de datos
+            if Rars.HAS_DATA:
+                # -- Se espera que tenga segmento de datos: OK
+                print("> ✅️ ", end='')
+
+            else:
+                # -- No es obligatorio que tengo segmento de datos
+                print("> ☑️ ", end='')
+
+            print(f"Hay segmento de datos{Rars.DATA}")
+
+        # -- NO HAY Segmento de datos
+        # -- No tiene por qué ser un error. Depende de si se ha especificado
+        # -- o no en el enunciado
         else:
-            print("> ❌️ ERROR: No hay datos en el segmento de datos "
-                  "🔥️ERROR DE ESPECIFICACIONES)")
-            Rars.errors = True
+
+            # -- El enunciado requiere que HAYA segmento de datos
+            if Rars.HAS_DATA:
+                print("> ❌️ ERROR: No hay segmento de datos"
+                      "    🔥️ VIOLACION DE ESPECIFICACIONES")
+                Rars.errors = True
+
+            # -- No tiene segmento de datos, y el enunciado NO lo requiere
+            else:
+                print("> ✅️ NO hay segmento de datos")
 
     # ────────────────────────────────────────────────────────────
     # ── CHECK_TEXT.  Comprobar si se ha generado el fichero
@@ -336,7 +378,11 @@ class Rars:
 
         # -- Obtener una lista (de texto) con los valores de la
         # -- memoria
-        mem_str = data_str.split("\n")
+        try:
+            mem_str = data_str.split("\n")
+        except UnboundLocalError:
+            print("ERROR DESCONOCIDO!")
+            mem_str = ""
 
         # -- Meter todas las variables en una lista, convertidos
         # -- a enteros
@@ -382,8 +428,11 @@ class Rars:
 
             # -- Parsear el registro actual y
             # -- almacenarlo
-            x_str = val.split("\t")[1]
-            Rars.regs.append(int(x_str, 16))
+            try:
+                x_str = val.split("\t")[1]
+                Rars.regs.append(int(x_str, 16))
+            except IndexError:
+                print("ERROR DESCONOCIDO")
 
     # ──────────────────────────────────────────────────────────────────────
     # ── PROCESS_CODE. Procesar el segmento de codigo
@@ -465,7 +514,7 @@ class Rars:
             else:
                 print("  > No conseguidos...")
 
-        util.line(ansi.YELLOW, util.WIDTH)
+        util.line(ansi.YELLOW, Rars.WIDTH)
 
         print()
         if Rars.stdout:
