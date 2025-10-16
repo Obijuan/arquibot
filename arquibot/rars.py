@@ -207,8 +207,9 @@ class Rars:
         if os.path.exists(Rars.MAIN_ASM):
             print(f"> ✅️ {Rars.MAIN_ASM} existe")
         else:
-            print(f"> ❌️ ERROR: {Rars.MAIN_ASM} no encontrado "
-                  "(🔥️ERROR DE ESPECIFICACIONES)")
+            print(f"> ❌️ {ansi.RED}ERROR: {ansi.YELLOW}{Rars.MAIN_ASM} "
+                  f"{ansi.RED}no encontrado {ansi.DEFAULT}\n"
+                  f"{ansi.LRED}    🔥️VIOLACION DE ESPECIFICACIONES")
             print()
             sys.exit()
 
