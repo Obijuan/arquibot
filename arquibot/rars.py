@@ -385,16 +385,14 @@ class Rars:
             with open(Rars.DATA, "r") as data_file:
                 data_str = data_file.read()
 
-        except FileNotFoundError:
-            print("> ❌️ ERROR: Fichero data.hex NO generado")
-
-        # -- Obtener una lista (de texto) con los valores de la
-        # -- memoria
-        try:
+            # -- Obtener una lista (de texto) con los valores de la
+            # -- memoria
             mem_str = data_str.split("\n")
-        except UnboundLocalError:
-            print("ERROR DESCONOCIDO!")
-            mem_str = ""
+
+        except FileNotFoundError:
+            # -- NO hay segmento de datos
+            # -- No se genera error porque ya se ha mostrado previamente
+            mem_str = ''
 
         # -- Meter todas las variables en una lista, convertidos
         # -- a enteros
