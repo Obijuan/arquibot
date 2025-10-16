@@ -7,10 +7,17 @@ import arquibot.util as util
 import arquibot.ansi as ansi
 
 
+# ── VERSION DE ARQUITBOT
+VERSION = 0.2
+
+
 # ──────────────────────────────────────────
 # ── MODULO RARS
 # ──────────────────────────────────────────
 class Rars:
+
+    # ─── Anchura de las lineas del encabezado
+    WIDTH = 40
 
     # ── Nombre del ejecutable del Rars
     NAME = "rars1_6.jar"
@@ -65,7 +72,7 @@ class Rars:
         Rars.bonus = bonus
 
         # ── Mostrar el encabezado
-        util.show_header()
+        Rars.show_header()
 
         # -- Comprobar si el rars existe
         # -- Si no es asi se descarga
@@ -108,6 +115,17 @@ class Rars:
 
         # -- Leer todas las variables del segmento de datos
         Rars.read_variables()
+
+    # ────────────────────────────────────────────────────────
+    # ── Imprimir el encabezado de ARQUI-BOTS
+    # ────────────────────────────────────────────────────────
+    def show_header():
+        util.line(ansi.YELLOW, Rars.WIDTH)
+        print(f"{ansi.YELLOW}ARQUI-BOT {VERSION}")
+        util.line(ansi.YELLOW, Rars.WIDTH)
+
+        # ── Volver a color normal
+        print(ansi.DEFAULT, end="")
 
     # ──────────────────────────────────────────────────
     # ── EXISTS()  Comprobar si el fichero ejecutable

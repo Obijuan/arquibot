@@ -1,13 +1,6 @@
 # ──────────────────────────────────────────
 # ── MODULO para utilidades
 # ──────────────────────────────────────────
-import arquibot.ansi as ansi
-
-
-# ─────── Constantes
-# ─── Anchura de las lineas del encabezado
-WIDTH = 40
-
 
 # ────────────────────────────────────────────────────────
 # ── Dibujar una linea horizontal
@@ -20,15 +13,3 @@ def line(color: str, width: int):
     width: Line width
     """
     print(color + "─" * width)
-
-
-# ────────────────────────────────────────────────────────
-# ── Imprimir el encabezado de ARQUI-BOTS
-# ────────────────────────────────────────────────────────
-def show_header():
-    line(ansi.YELLOW, WIDTH)
-    print(ansi.YELLOW + "ARQUI-BOT" + ansi.DEFAULT)
-    line(ansi.YELLOW, WIDTH)
-
-    # ── Volver a color normal
-    print(ansi.DEFAULT, end="")
