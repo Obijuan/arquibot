@@ -39,7 +39,7 @@ class Rars:
     MAIN_ASM = "main.s"
 
     # ── Indicar si el programa debe tener segmento de datos o no
-    HAS_DATA = False
+    expected_data = False
 
     # ── Guardar las salidas del rars y del programa
     # ── Al ejecutar el Rars
@@ -65,18 +65,18 @@ class Rars:
     # ── CONSTRUCTOR
     # ── Entradas:
     # ──  * main: Nombre del fichero ensamblador principal
-    # ──  * has_data: Indicar si el programa debe tener segmento de datos
+    # ──  * expected_data: Indicar si el programa debe tener segmento de datos
     # ──  * bonus: Numero de instrucciones maximo para conseguir
     # ──           los bonus
     # ───────────────────────────────────────────────────────────────────────
     def __init__(self,
                  main: str,
-                 has_data: bool = False,
+                 expected_data: bool = False,
                  bonus: int = 2):
 
         # -- Guardar los parametros pasados
         Rars.MAIN_ASM = main
-        Rars.HAS_DATA = has_data
+        Rars.expected_data = expected_data
         Rars.bonus = bonus
 
         # ── Mostrar el encabezado
@@ -323,7 +323,7 @@ class Rars:
         if os.path.exists(Rars.DATA):
 
             # -- Hay segmento de datos
-            if Rars.HAS_DATA:
+            if Rars.expected_data:
                 # -- Se espera que tenga segmento de datos: OK
                 print("> ✅️ ", end='')
 
@@ -339,7 +339,7 @@ class Rars:
         else:
 
             # -- El enunciado requiere que HAYA segmento de datos
-            if Rars.HAS_DATA:
+            if Rars.expected_data:
                 Rars.print_error("No hay segmento de DATOS", violation=True)
                 Rars.errors = True
 
