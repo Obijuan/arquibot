@@ -452,5 +452,5 @@ class Rars:
         if Rars.stdout:
             print("SALIDA programa:\n", Rars.stdout)
 
-        print(f"{ansi.WHITE}Pulsa ENTER...")
-        input()
+        # print(f"{ansi.WHITE}Pulsa ENTER...")
+        # input()
