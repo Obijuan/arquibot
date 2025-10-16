@@ -340,7 +340,7 @@ class Rars:
 
             # -- El enunciado requiere que HAYA segmento de datos
             if Rars.HAS_DATA:
-                Rars.print_error("No hay segmento de datos", violation=True)
+                Rars.print_error("No hay segmento de DATOS", violation=True)
                 Rars.errors = True
 
             # -- No tiene segmento de datos, y el enunciado NO lo requiere
@@ -358,7 +358,7 @@ class Rars:
         if os.path.exists(Rars.TEXT):
             print(f"> ✅️ {Rars.TEXT} generado")
         else:
-            print("> ❌️ ERROR: No hay segmento de codigo! ")
+            Rars.print_error("No hay segmento de CODIGO!", violation=True)
             Rars.errors = True
 
     # ────────────────────────────────────────────────────────────
@@ -431,7 +431,10 @@ class Rars:
                 x_str = val.split("\t")[1]
                 Rars.regs.append(int(x_str, 16))
             except IndexError:
-                print("ERROR DESCONOCIDO")
+                # -- Lo parseado no es un registro
+                # -- es un mensaje diferente
+                # -- No hacemos nada
+                pass
 
     # ──────────────────────────────────────────────────────────────────────
     # ── PROCESS_CODE. Procesar el segmento de codigo
