@@ -80,7 +80,7 @@ class Rars:
     def __init__(self,
                  main: str,
                  expected_data: bool = False,
-                 bonus: int = 2):
+                 bonus: int = 0):
 
         # -- Guardar los parametros pasados
         Rars.MAIN_ASM = main
@@ -358,7 +358,7 @@ class Rars:
 
             else:
                 # -- No es obligatorio que tengo segmento de datos
-                print("> ☑️ ", end='')
+                print("> ☑️  ", end='')
 
             print("Hay segmento de datos")
 
@@ -494,7 +494,7 @@ class Rars:
 
         # --- Comprobar si el programa termina con normalidad, llamando a EXIT
         if "calling exit" in Rars.stderr:
-            print("> ✅️ El programa termina llamando a EXIT")
+            print("> ✅️ Se termina con EXIT")
 
     # ──────────────────────────────────────────────────────────────────────
     # ── CHECK_VARIABLES. Comprobar si las variables tienen los valores
@@ -526,7 +526,7 @@ class Rars:
 
         # -- Comprobar BONUS
         # -- Solo si no hay errores previos
-        if not Rars.errors:
+        if not Rars.errors and Rars.bonus > 0:
             print("> Comprobando BONUS...")
             ok_inst = False
 

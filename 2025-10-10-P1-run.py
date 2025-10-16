@@ -13,7 +13,9 @@ data_ok = {
 }
 
 # -- Preparar el contexto
-Rars("asm/2025-10-10-P1-AC-Teleco-calculo-sol.s", bonus=10)
+Rars("asm/2025-10-10-P1-AC-Teleco-calculo-sol.s",
+     expected_data=True,
+     bonus=10)
 
 Rars.check_variables(data_ok)
 
