@@ -158,7 +158,7 @@ class Rars:
     # ──────────────────────────────────────────────────
     def check():
         if not Rars.exists():
-            print("> ❌️ RARS no existe")
+            print("> 🤚 RARS no existe")
             Rars.download()
 
         print("> ✅️ RARS EXISTE")
