@@ -29,17 +29,25 @@ class Rars:
     # ── Numero maximo de ciclos a probar
     MAX_STEPS = 10000
 
-    # ── Fichero donde volcar el segmento de datos
-    DATA = "data.hex"
-
-    # ── Fichero donde volcar el segmento de código
-    TEXT = "text.hex"
-
     # ── Nombre del fichero MAIN a ensamblar
     MAIN_ASM = "main.s"
 
+    # ────── SEGMENTO DE CODIGO
+    # ── Fichero donde volcar el segmento de código
+    TEXT = "text.hex"
+
+    # ── El programa analizado tiene segmento de Codigo
+    HAS_TEXT = False
+
+    # ────── SEGMENTO DE DATOS
+    # ── Fichero donde volcar el segmento de datos
+    DATA = "data.hex"
+
     # ── Indicar si el programa debe tener segmento de datos o no
-    expected_data = False
+    EXPECTED_DATA = False
+
+    # ── El programa analizado tiene segmento de datos
+    HAS_DATA = False
 
     # ── Guardar las salidas del rars y del programa
     # ── Al ejecutar el Rars
@@ -76,7 +84,7 @@ class Rars:
 
         # -- Guardar los parametros pasados
         Rars.MAIN_ASM = main
-        Rars.expected_data = expected_data
+        Rars.EXPECTED_DATA = expected_data
         Rars.bonus = bonus
 
         # ── Mostrar el encabezado
@@ -322,8 +330,12 @@ class Rars:
         #  el segmento de datos
         if os.path.exists(Rars.DATA):
 
-            # -- Hay segmento de datos
-            if Rars.expected_data:
+            # -- Tiene segmento de datos
+            Rars.HAS_DATA = True
+
+            # -- Imprimir mensaje según si se espera o no que tenga
+            # -- segmento de datos
+            if Rars.EXPECTED_DATA:
                 # -- Se espera que tenga segmento de datos: OK
                 print("> ✅️ ", end='')
 
@@ -339,7 +351,7 @@ class Rars:
         else:
 
             # -- El enunciado requiere que HAYA segmento de datos
-            if Rars.expected_data:
+            if Rars.EXPECTED_DATA:
                 Rars.print_error("No hay segmento de DATOS", violation=True)
                 Rars.errors = True
 
@@ -357,6 +369,7 @@ class Rars:
         # -- el programa no tiene la directiva .text
         if os.path.exists(Rars.TEXT):
             print(f"> ✅️ {Rars.TEXT} generado")
+            Rars.HAS_TEXT = True
         else:
             Rars.print_error("No hay segmento de CODIGO!", violation=True)
             Rars.errors = True
@@ -449,9 +462,10 @@ class Rars:
                 Rars.instrucciones = len(code)
 
         except FileNotFoundError:
-            # -- No hay codigo!
-            # -- Tipicamente porque no ha puesto .text
-            print("> ❌️ ERROR: Segmento de codigo vacio!!")
+            # -- No hay segmento de codigo
+            # -- No se muestra mensaje de error porque ya se ha
+            # -- hecho previamente
+            pass
 
     # ──────────────────────────────────────────────────────────────────────
     # ── CHECK_EXIT. Comprobar la terminacion del programa
