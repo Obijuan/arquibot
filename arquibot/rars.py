@@ -307,6 +307,25 @@ class Rars:
     # ── CHECK_asm_errors.  Comprobar errores de ensamblado
     # ────────────────────────────────────────────────────────────
     def check_asm_errors():
+
+        # -- Detectar Warnings
+        # Patrón de expresión regular:
+        # Grupo 1: 'line ' seguido de uno o más dígitos (\d+)
+        # Grupo 2: Mensaje de error
+        patron = r"line\s+(\d+)\s+column\s+\d+:\s+(.*)"
+
+        # Buscar el patrón en la cadena
+        coincidencia = re.search(patron, Rars.stderr)
+
+        if coincidencia:
+            print(f"> ⚠️  {ansi.YELLOW}WARNING: {ansi.DEFAULT}"
+                  "Problemas con el ensamblado 😱️😱️")
+            linea = int(coincidencia.group(1))
+            msg = coincidencia.group(2).strip()
+            print(f"  🔹️ {ansi.YELLOW}{msg}{ansi.DEFAULT}")
+            print(f"  🔹️ {ansi.BLUE}Línea: {linea}{ansi.DEFAULT}")
+
+        # -- Detectar errores
         patron = r"Error in .*/[^/]+\sline\s(\d+).+: (.+)"
         resultado = re.search(patron, Rars.stderr)
         if resultado:
