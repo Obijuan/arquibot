@@ -1,7 +1,7 @@
 # ──────────────────────────────────────────
 # ── MODULO para utilidades
 # ──────────────────────────────────────────
-import ansi
+import arquibot.ansi as ansi
 
 
 # ─────── Constantes

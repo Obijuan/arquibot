@@ -3,8 +3,8 @@ import sys
 import re
 import requests
 import subprocess
-import util
-import ansi
+import arquibot.util as util
+import arquibot.ansi as ansi
 
 
 # ──────────────────────────────────────────

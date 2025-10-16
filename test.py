@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from rars import Rars
+from arquibot.rars import Rars
 
 # ───────────────────────────────────────
 #    MAIN
