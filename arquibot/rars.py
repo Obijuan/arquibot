@@ -312,7 +312,7 @@ class Rars:
         # Patrón de expresión regular:
         # Grupo 1: 'line ' seguido de uno o más dígitos (\d+)
         # Grupo 2: Mensaje de error
-        patron = r"line\s+(\d+)\s+column\s+\d+:\s+(.*)"
+        patron = r"Warning in .*/[^/]+\sline\s+(\d+)\s+column\s+\d+:\s+(.*)"
 
         # Buscar el patrón en la cadena
         coincidencia = re.search(patron, Rars.stderr)
@@ -324,20 +324,18 @@ class Rars:
             msg = coincidencia.group(2).strip()
             print(f"  🔹️ {ansi.YELLOW}{msg}{ansi.DEFAULT}")
             print(f"  🔹️ {ansi.BLUE}Línea: {linea}{ansi.DEFAULT}")
+            Rars.errors = True
 
         # -- Detectar errores
         patron = r"Error in .*/[^/]+\sline\s(\d+).+: (.+)"
         resultado = re.search(patron, Rars.stderr)
         if resultado:
-            print("> ❌️ ERROR: El programa NO ensambla 😱️😱️")
+            Rars.print_error("El programa NO ensambla 😱️😱️")
             linea = resultado.group(1)
             msg = resultado.group(2)
-            print(f"🔹️Línea: {linea}")
-            print(f"🔹️Error: {msg}")
-            print()
-            error_output_list = Rars.stderr.split("\n")
-            print(ansi.RED + f"{error_output_list[0]}\n" + ansi.DEFAULT)
-            sys.exit(1)
+            print(f"  🔹️ {ansi.RED}{msg}{ansi.DEFAULT}")
+            print(f"  🔹️ {ansi.BLUE}Línea: {linea}{ansi.DEFAULT}")
+            Rars.errors = True
 
     # ────────────────────────────────────────────────────────────
     # ── CHECK_DATA.  Comprobar si se ha generado el fichero
