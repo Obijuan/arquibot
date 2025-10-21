@@ -20,5 +20,12 @@ Rars("asm/term.s",
 
 Rars.check_variables(data_ok)
 
+# -- Comprobar que se ha usado el registro x9
+reg_x9_ok = Rars.regs[9] == 57
+if reg_x9_ok:
+    print(f"> ✅️ Registro x9: {Rars.regs[9]}")
+else:
+    Rars.print_error("Valor incorrecto en registro x9")
+
 # -- Terminar
 Rars.exit()

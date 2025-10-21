@@ -155,6 +155,7 @@ class Rars:
     def print_error(emsg: str, violation: bool = False):
 
         print(f"> ❌️ {ansi.RED}ERROR: {ansi.LWHITE}{emsg}{ansi.DEFAULT}")
+        Rars.errors = True
         if violation:
             print(f"{ansi.LMAGENTA}     🔥️ VIOLACION DE ESPECIFICACIONES")
             print(f"{ansi.DEFAULT}", end='', flush=True)
