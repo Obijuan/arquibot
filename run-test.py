@@ -7,13 +7,16 @@ from arquibot.rars import Rars
 
 # -- Valores esperados para las variables
 data_ok = {
-    "a": 1,
-    "b": 2,
-    "f": 3
+    "var0": 0xCAFEBACA,
+    "a": 10,
+    "b": 100,
+    "f": 57
 }
 
 # -- Preparar el contexto
-Rars("asm/test.s", bonus=10)
+Rars("asm/term.s",
+     expected_data=True,
+     bonus=11)
 
 Rars.check_variables(data_ok)
 
