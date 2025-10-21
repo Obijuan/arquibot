@@ -180,9 +180,18 @@ class Rars:
 
         # ── Realizar la descarga!
         print("  > Descargando RARS")
-        response = requests.get(Rars.URL)
+        try:
+            response = requests.get(Rars.URL)
+        except requests.exceptions.ConnectionError:
 
-        # ── Ha ocurrido un error en la descarga
+            # -- No hay Rars. Terminar!
+            # -- NO hay conexion a Internet
+            Rars.print_error("No se puede descargar el RARs")
+            print("> Abortando...\n")
+            sys.exit(1)
+
+        # ── Parece que sí hay internet, pero
+        # ── Ha ocurrido otro error en la descarga
         # ── Mostrar un error y terminar!
         if response.status_code != 200:
 
