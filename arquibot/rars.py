@@ -135,6 +135,7 @@ class Rars:
     # ────────────────────────────────────────────────────────
     # ── Imprimir el encabezado de ARQUI-BOTS
     # ────────────────────────────────────────────────────────
+    @staticmethod
     def show_header():
         util.line(ansi.YELLOW, Rars.WIDTH)
         print(f"{ansi.YELLOW}ARQUI-BOT {VERSION}")
@@ -150,6 +151,7 @@ class Rars:
     # ──    * violation: Indica si mostrar mensaje dicion de violacion de
     # ──                 especificaciones
     # ────────────────────────────────────────────────────────────────────────
+    @staticmethod
     def print_error(emsg: str, violation: bool = False):
 
         print(f"> ❌️ {ansi.RED}ERROR: {ansi.LWHITE}{emsg}{ansi.DEFAULT}")
@@ -164,6 +166,7 @@ class Rars:
     # ──   * true: Existe!
     # ──   * false: No existe
     # ──────────────────────────────────────────────────
+    @staticmethod
     def exists() -> bool:
         return os.path.exists(Rars.NAME)
 
@@ -172,6 +175,7 @@ class Rars:
     # ── No se comprueba si ya existe en el directorio
     # ── el ejecutable
     # ──────────────────────────────────────────────────
+    @staticmethod
     def download():
 
         # ── Realizar la descarga!
@@ -204,6 +208,7 @@ class Rars:
     # ── CHECK. Comprobar si el rars existe
     # ── si es así, se descarga!
     # ──────────────────────────────────────────────────
+    @staticmethod
     def check():
         if not Rars.exists():
             print("> 🤚 RARS no existe")
@@ -215,6 +220,7 @@ class Rars:
     # ── DELETE_DATA.  Borrar el archivo donde esta
     # ── el volcado el segmento de datos
     # ──────────────────────────────────────────────────
+    @staticmethod
     def delete_data():
         if os.path.exists(Rars.DATA):
             os.remove(Rars.DATA)
@@ -224,6 +230,7 @@ class Rars:
     # ── DELETE_TEXT.  Borrar el archivo donde esta
     # ── el volcado el segmento de codigo
     # ──────────────────────────────────────────────────
+    @staticmethod
     def delete_text():
         if os.path.exists(Rars.TEXT):
             os.remove(Rars.TEXT)
@@ -233,6 +240,7 @@ class Rars:
     # ── CHECK_MAIN_ASM.  Comprobar si el fichero asm
     # ── principal existe
     # ──────────────────────────────────────────────────
+    @staticmethod
     def check_main_asm():
         if os.path.exists(Rars.MAIN_ASM):
             print(f"> ✅️ {Rars.MAIN_ASM} existe")
@@ -245,6 +253,7 @@ class Rars:
     # ──────────────────────────────────────────────────
     # ── EXEC.  Ejecutar el RARs
     # ──────────────────────────────────────────────────
+    @staticmethod
     def exec():
 
         # -- Probando fichero fuente
@@ -281,6 +290,7 @@ class Rars:
     # ── CHECK_runtime_error.  Comprobar los errores en tiempo
     # ── de ejecucion al ejecutar el RARs
     # ────────────────────────────────────────────────────────────
+    @staticmethod
     def check_runtime_error():
 
         # -- Comprobar si hay runtime error
@@ -306,6 +316,7 @@ class Rars:
     # ────────────────────────────────────────────────────────────
     # ── CHECK_asm_errors.  Comprobar errores de ensamblado
     # ────────────────────────────────────────────────────────────
+    @staticmethod
     def check_asm_errors():
 
         # -- Detectar Warnings
@@ -341,6 +352,7 @@ class Rars:
     # ── CHECK_DATA.  Comprobar si se ha generado el fichero
     # ── con el volcado del segmento de datos
     # ────────────────────────────────────────────────────────────
+    @staticmethod
     def check_data():
         # -- Comprobar si se ha generado el fichero con el volcado
         # -- de memoria. Si no se ha generado es porque no se ha declaro
@@ -380,6 +392,7 @@ class Rars:
     # ── CHECK_TEXT.  Comprobar si se ha generado el fichero
     # ── con el volcado del segmento de codigo
     # ────────────────────────────────────────────────────────────
+    @staticmethod
     def check_text():
         # -- Comprobar si se ha generado el fichero con el volcado
         # -- del segmento de codigo. Si no se ha generado es porque
@@ -395,6 +408,7 @@ class Rars:
     # ── READ_VARIABLES. Leer el segmento de datos del fichero
     # ── generado y devolver una lista con ellas
     # ────────────────────────────────────────────────────────────
+    @staticmethod
     def read_variables():
         try:
             # -- Leer el fichero con el segmento de datos
@@ -427,6 +441,7 @@ class Rars:
     # ────────────────────────────────────────────────────────────
     # ── READ_REGS. Leer los registros
     # ────────────────────────────────────────────────────────────
+    @staticmethod
     def read_regs():
         return Rars.regs
 
@@ -435,6 +450,7 @@ class Rars:
     # ── A partir de esta salida se determina si la salida se ha realizado
     # ── llamando a exit, el número de ciclos y los registros
     # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
     def process_output():
 
         # -- Obtener la salida de error del RARs
@@ -468,6 +484,7 @@ class Rars:
     # ── PROCESS_CODE. Procesar el segmento de codigo
     # ── Se actualiza el numero de instrucciones
     # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
     def process_code():
         # -- Leer el fichero del codigo
         try:
@@ -486,6 +503,7 @@ class Rars:
     # ── CHECK_EXIT. Comprobar la terminacion del programa
     # ── y emitir los mensajes de error correspondientes
     # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
     def check_exit():
         # --- Comprobar si el programa no termina de forma controlada
         if "dropping off" in Rars.stderr:
@@ -502,6 +520,7 @@ class Rars:
     # ── ENTRADA:
     # ──   * data_ok: Diccionario con las variables y sus valores correctos
     # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
     def check_variables(data_ok: dict):
 
         print(f"  {ansi.BLUE}──────── Comprobando variables{ansi.DEFAULT}")
@@ -522,6 +541,7 @@ class Rars:
     # ──────────────────────────────────────────────────────────────────────
     # ── EXIT. Terminar. Mostrar las instrucciones, ciclos y bonus
     # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
     def exit():
         # -- Mostrar informacion
         print(f"> Instrucciones totales: {Rars.instrucciones}")
