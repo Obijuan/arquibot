@@ -585,6 +585,14 @@ class Rars:
             print("> ✅️ Se termina con EXIT")
 
     # ──────────────────────────────────────────────────────────────────────
+    # ── PRINT_SECTION
+    # ── Imprimir el comienzo de la sección
+    # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
+    def print_section(title: str):
+        print(f"  {ansi.BLUE}──────── {title}{ansi.DEFAULT}")
+
+    # ──────────────────────────────────────────────────────────────────────
     # ── CHECK_VARIABLES. Comprobar si las variables tienen los valores
     # ── correctos
     # ── ENTRADA:
@@ -593,7 +601,7 @@ class Rars:
     @staticmethod
     def check_variables(data_ok: dict):
 
-        print(f"  {ansi.BLUE}──────── Comprobando variables{ansi.DEFAULT}")
+        Rars.print_section("Comprobando variables")
 
         i = 0
         for var, value_ok in data_ok.items():
@@ -614,7 +622,8 @@ class Rars:
     # ──────────────────────────────────────────────────────────────────────
     @staticmethod
     def show_console_output():
-        print(f"  {ansi.BLUE}──────── Salida en consola{ansi.DEFAULT}")
+
+        Rars.print_section("Salida en consola")
         if Rars.stdout:
             print(Rars.stdout)
 
@@ -630,8 +639,7 @@ class Rars:
     @staticmethod
     def check_console_output(posible_outputs: list[str]):
 
-        print(f"  {ansi.BLUE}──────── Comprobando salida en consola"
-              f"{ansi.DEFAULT}")
+        Rars.print_section("Comprobando salida en consola")
 
         # -- Comprobar salida del programa
         if Rars.stdout in posible_outputs:
@@ -643,13 +651,56 @@ class Rars:
             print(f"  Salida generada: {Rars.stdout}")
             print("> ❌️ Salida NO exacta")
 
+    # ──────────────────────────────────────────────────────
+    # ── LOAD_BYTE(off)
+    # ──
+    # ──  Leer un byte del offset de memoria
+    # ──  de datos indicado. Ej. offset 0 = dir 0x10010000
+    # ──────────────────────────────────────────────────────
+    @staticmethod
+    def load_byte(off: int) -> int:
+
+        # -- Obtener direccion de palabra
+        dir_word = off >> 2
+
+        # -- Obtener el numero de byte dentro de la palabra
+        nbyte = off & 0x3
+
+        # -- Leer la palabra
+        word = Rars.variables[dir_word]
+
+        # -- Obtener el byte
+        byte = (word >> (nbyte * 8)) & 0xFF
+
+        # -- Devolver el byte
+        return byte
+
+    # ──────────────────────────────────────────────────────
+    # ── LOAD_STRING(off)
+    # ──
+    # ──  Leer una cadena a partir del offset indicado del
+    # ──  segmento de datos. Ej. offset 0 = dir 0x10010000
+    # ──────────────────────────────────────────────────────
+    @staticmethod
+    def load_string(offset: int) -> str:
+        cad = ""
+        while True:
+            byte = Rars.load_byte(offset)
+            if byte == 0:
+                break
+            # print(f"Offset: {offset:x}, Byte: {byte:x}")
+            cad = cad + chr(byte)
+            offset = offset + 1
+
+        return cad
+
     # ──────────────────────────────────────────────────────────────────────
     # ── EXIT. Terminar. Mostrar las instrucciones, ciclos y bonus
     # ──────────────────────────────────────────────────────────────────────
     @staticmethod
     def exit():
 
-        print(f"  {ansi.BLUE}──────── Comprobaciones finales{ansi.DEFAULT}")
+        Rars.print_section("Comprobaciones finales")
 
         # -- Mostrar informacion
         print(f"> Instrucciones totales: {Rars.instrucciones}")
