@@ -7,16 +7,16 @@ from arquibot.rars import Rars
 
 # -- Valores esperados para la salida en consola
 SALIDA_ESPERADA = [
-    "Introduce cadena:Cadena sin espacios finales:TESTTEST*",
-    "otra opcion"
+    "Introduce cadena de prueba: Cadena copiada y convertida: HOLA",
+    ""
 ]
 
 # -- Preparar el contexto
 Rars(
-      "asm/spacefin.s",     # -- Main
-      "asm/ecall.s",        # -- Include
+      "asm/copyupper.s",    # -- Main
+      "asm/so.s",           # -- Include
       expected_data=True,   # -- Segmento de datos
-      input="TEST     \n",  # -- Entrada estandar
+      input="hola\n",  # -- Entrada estandar
       tipo_bonus=Rars.BONUS_CICLOS,
       bonus=49
     )
