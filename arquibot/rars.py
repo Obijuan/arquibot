@@ -647,8 +647,10 @@ class Rars:
             print("> ✅️ ¡Salida exacta!")
         else:
             Rars.errors = True
-            print(f"  Salida esperada: {posible_outputs[0]}")
-            print(f"  Salida generada: {Rars.stdout}")
+            print(f'>  {ansi.GREEN}Salida esperada{ansi.DEFAULT}: \n'
+                  f'"{posible_outputs[0]}"')
+            print(f'>  {ansi.RED}Salida generada{ansi.DEFAULT}: \n'
+                  f'"{Rars.stdout}"')
             print("> ❌️ Salida NO exacta")
 
     # ──────────────────────────────────────────────────────
@@ -722,10 +724,10 @@ class Rars:
 
         # -- Modo normal: Comprobar y mostrar salida
         if check_result:
-            print(f"> ✅️ {var_name}: {cadena_esperada} ")
+            print(f'> ✅️ {var_name}: "{cadena_esperada}" ')
         else:
-            print(f"> ❌️ {var_name}: {cad}\n"
-                  f"     Debería ser: {cadena_esperada}")
+            print(f'> ❌️ {var_name}: "{cad}"\n'
+                  f'     Debería ser: "{cadena_esperada}"')
             Rars.errors = True
 
         return check_result
