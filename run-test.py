@@ -18,7 +18,7 @@ Rars(
       expected_data=True,   # -- Segmento de datos
       input="hola\n",  # -- Entrada estandar
       tipo_bonus=Rars.BONUS_CICLOS,
-      bonus=49
+      bonus=59
     )
 
 # -- Comprobar la salida del programa
