@@ -5,27 +5,23 @@ from arquibot.rars import Rars
 #    MAIN
 # ───────────────────────────────────────
 
-# -- Valores esperados para las variables
-data_ok = {
-    "var0": 0xCAFEBACA,
-    "a": 10,
-    "b": 100,
-    "f": 57
-}
+# -- Valores esperados para la salida en consola
+SALIDA_ESPERADA = [
+    "Introduce cadena:Cadena sin espacios finales:TESTTEST*",
+    "otra opcion"
+]
 
 # -- Preparar el contexto
-Rars("asm/term.s",
-     expected_data=True,
-     bonus=11)
+Rars(
+      "asm/spacefin.s",     # -- Main
+      expected_data=True,   # -- Segmento de datos
+      input="TEST     \n",  # -- Entrada estandar
+      tipo_bonus=Rars.BONUS_CICLOS,
+      bonus=49
+    )
 
-Rars.check_variables(data_ok)
-
-# -- Comprobar que se ha usado el registro x9
-reg_x9_ok = Rars.regs[9] == 57
-if reg_x9_ok:
-    print(f"> ✅️ Registro x9: {Rars.regs[9]}")
-else:
-    Rars.print_error("Valor incorrecto en registro x9")
+# -- Comprobar la salida del programa
+Rars.check_console_output(SALIDA_ESPERADA)
 
 # -- Terminar
 Rars.exit()

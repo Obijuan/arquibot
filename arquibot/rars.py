@@ -8,7 +8,7 @@ import arquibot.ansi as ansi
 
 
 # ── VERSION DE ARQUITBOT
-VERSION = 0.2
+VERSION = 0.3
 
 
 # ──────────────────────────────────────────
@@ -32,6 +32,10 @@ class Rars:
     # ── Nombre del fichero MAIN a ensamblar
     MAIN_ASM = "main.s"
 
+    # Tipo enumerado para indicar el tipo de bonus
+    BONUS_INSTRUCCIONES = 0
+    BONUS_CICLOS = 1
+
     # ────── SEGMENTO DE CODIGO
     # ── Fichero donde volcar el segmento de código
     TEXT = "text.hex"
@@ -43,6 +47,9 @@ class Rars:
     # ── Fichero donde volcar el segmento de datos
     DATA = "data.hex"
 
+    # ── Numero de bytes a volcar del segmento de datos
+    DATA_SIZE = 256
+
     # ── Indicar si el programa debe tener segmento de datos o no
     EXPECTED_DATA = False
 
@@ -53,6 +60,9 @@ class Rars:
     # ── Al ejecutar el Rars
     stderr = ""
     stdout = ""
+
+    # ── Texto enviado por la entrada estandar
+    input = ""
 
     # ── Indica si se han producido errores
     errors = False
@@ -74,17 +84,25 @@ class Rars:
     # ── Entradas:
     # ──  * main: Nombre del fichero ensamblador principal
     # ──  * expected_data: Indicar si el programa debe tener segmento de datos
-    # ──  * bonus: Numero de instrucciones maximo para conseguir
-    # ──           los bonus
+    # ──  * input: Texto a enviar por la entrada estandar
+    # ──  * tipo_bonus: Tipo de bonus
+    # ──    * Rars.BONUS_INSTRUCCIONES
+    # ──    * Rars.BONUS_CILOS
+    # ──  * bonus: valor maximo para conseguir los bonus
+    # ──     (instrucciones o ciclos)
     # ───────────────────────────────────────────────────────────────────────
     def __init__(self,
                  main: str,
                  expected_data: bool = False,
+                 input: str = "",
+                 tipo_bonus: int = BONUS_INSTRUCCIONES,
                  bonus: int = 0):
 
         # -- Guardar los parametros pasados
         Rars.MAIN_ASM = main
         Rars.EXPECTED_DATA = expected_data
+        Rars.input = input
+        Rars.tipo_bonus = tipo_bonus
         Rars.bonus = bonus
 
         # ── Mostrar el encabezado
@@ -266,6 +284,10 @@ class Rars:
     @staticmethod
     def exec():
 
+        # -- Obtener la direccion final del segmento de datos
+        data_orig = 0x10010000  # -- Direccion inicial seg. datos
+        data_end = data_orig + Rars.DATA_SIZE
+
         # -- Probando fichero fuente
         print(f"> Probando: {Rars.MAIN_ASM}")
 
@@ -275,7 +297,7 @@ class Rars:
                   f"x13 x14 x15 x16 x17 x18 x19 x20 x21 x22 x23 x24 "\
                   f"x25 x26 x27 x28 x29 x30 x31 "\
                   f"nc me ic {Rars.MAX_STEPS} "\
-                  f"dump 0x10010000-0x10010010 HexText {Rars.DATA} "\
+                  f"dump 0x10010000-0x{data_end:x} HexText {Rars.DATA} "\
                   f"dump .text HexText {Rars.TEXT} {Rars.MAIN_ASM}"
 
         # -- Convertirlo a lista, colocando cada argumento en un item
@@ -287,14 +309,20 @@ class Rars:
         print(ansi.CYAN + cmd_str + ansi.DEFAULT)
 
         # -- Ejecutar el comando!
-        resultado = subprocess.run(cmd, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
+        resultado = subprocess.run(
+            cmd,
+            text=True,         # -- Entrada y salida son cadenas de texto
+            input=Rars.input,  # -- Cadena para la entrada estandar
+            stdout=subprocess.PIPE,  # -- Salida estandar
+            stderr=subprocess.PIPE   # -- Salida de error
+        )
 
         # -- Guardar la salidas estandar y de error
         # --  Salida: mensajes emitidos por el programa ensamblador
-        # --  error: Mensajes emitidos por el RARs (informativos o de error)
-        Rars.stdout = resultado.stdout.decode()
-        Rars.stderr = resultado.stderr.decode()
+        # --  error: Mensajes emitidos por el RARs (informativos o
+        # --         de error)
+        Rars.stdout = resultado.stdout
+        Rars.stderr = resultado.stderr
 
     # ────────────────────────────────────────────────────────────
     # ── CHECK_runtime_error.  Comprobar los errores en tiempo
@@ -470,7 +498,7 @@ class Rars:
 
         # -- Leer los ciclos
         # -- Se encuentran en la linea 2
-        Rars.ciclos = contenido[2]
+        Rars.ciclos = int(contenido[2])
 
         # -- Lectura de los registros
         # -- Los registros empiezan en la linea 3
@@ -549,10 +577,38 @@ class Rars:
             i += 1
 
     # ──────────────────────────────────────────────────────────────────────
+    # ── CHECK_CONSOLE_OUTPUT. Comprobar si la salida de la consola es la
+    # ── correcta
+    # ── ENTRADA:
+    # ──   * posible_outputs: Lista con las posibles salidas esperadas. Si
+    # ──       niguna coincide, se considera error. En ese caso la que se
+    # ──       imprime como esperada es la primera (que se considera la
+    # ──         que debería ser)
+    # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
+    def check_console_output(posible_outputs: list[str]):
+
+        print(f"  {ansi.BLUE}──────── Comprobando salida en consola"
+              f"{ansi.DEFAULT}")
+
+        # -- Comprobar salida del programa
+        if Rars.stdout in posible_outputs:
+            print("> ✅️ ¡Salida exacta!")
+            print(f"  Salida:\n  {Rars.stdout}")
+        else:
+            Rars.errors = True
+            print("> ❌️ Salida NO exacta")
+            print(f"  Salida esperada: {posible_outputs[0]}")
+            print(f"  Salida generada: {Rars.stdout}")
+
+    # ──────────────────────────────────────────────────────────────────────
     # ── EXIT. Terminar. Mostrar las instrucciones, ciclos y bonus
     # ──────────────────────────────────────────────────────────────────────
     @staticmethod
     def exit():
+
+        print(f"  {ansi.BLUE}──────── Comprobaciones finales{ansi.DEFAULT}")
+
         # -- Mostrar informacion
         print(f"> Instrucciones totales: {Rars.instrucciones}")
         print(f"> Ciclos de ejecución: {Rars.ciclos}")
@@ -561,17 +617,29 @@ class Rars:
         # -- Solo si no hay errores previos
         if not Rars.errors and Rars.bonus > 0:
             print("> Comprobando BONUS...")
-            ok_inst = False
+            ok_bonus = False
 
-            # -- Comprobar instrucciones
-            if Rars.instrucciones <= Rars.bonus:
-                print(f"  > ✅️ Máximo de {Rars.bonus} instrucciones")
-                ok_inst = True
-            else:
-                print(f"  > ❌️ Más de {Rars.bonus} instrucciones...")
+            # -- Comprobar los bonus segun el tipo
+            if Rars.tipo_bonus == Rars.BONUS_INSTRUCCIONES:
+
+                # -- Comprobar instrucciones
+                if Rars.instrucciones <= Rars.bonus:
+                    print(f"  > ✅️ Máximo de {Rars.bonus} instrucciones")
+                    ok_bonus = True
+                else:
+                    print(f"  > ❌️ Más de {Rars.bonus} instrucciones...")
+
+            if Rars.tipo_bonus == Rars.BONUS_CICLOS:
+
+                # -- Comprobar ciclos
+                if Rars.ciclos <= Rars.bonus:
+                    print(f"  > ✅️ Máximo de {Rars.bonus} ciclos")
+                    ok_bonus = True
+                else:
+                    print(f"  > ❌️ Más de {Rars.bonus} ciclos...")
 
             # -- Comprobacion final de Bonus
-            if ok_inst:
+            if ok_bonus:
                 print(f"  > 🎖️  {ansi.YELLOW}BONUS CONSEGUIDO!!!"
                       f"{ansi.DEFAULT}")
             else:
@@ -580,8 +648,9 @@ class Rars:
         util.line(ansi.YELLOW, Rars.WIDTH)
 
         print()
-        if Rars.stdout:
-            print("SALIDA programa:\n", Rars.stdout)
+        # -- Debug: Mostrar la salida estandar
+        # if Rars.stdout:
+        #    print("SALIDA programa:\n", Rars.stdout)
 
         # print(f"{ansi.WHITE}Pulsa ENTER...")
         # input()
