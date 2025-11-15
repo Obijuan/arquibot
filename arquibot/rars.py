@@ -582,6 +582,16 @@ class Rars:
             i += 1
 
     # ──────────────────────────────────────────────────────────────────────
+    # ── SHOW_CONSOLE_OUTPUT(). Imprimir la salida en la consola
+    # ── Función de depuración
+    # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
+    def show_console_output():
+        print(f"  {ansi.BLUE}──────── Salida en consola{ansi.DEFAULT}")
+        if Rars.stdout:
+            print(Rars.stdout)
+
+    # ──────────────────────────────────────────────────────────────────────
     # ── CHECK_CONSOLE_OUTPUT. Comprobar si la salida de la consola es la
     # ── correcta
     # ── ENTRADA:
