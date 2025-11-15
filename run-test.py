@@ -5,29 +5,15 @@ from arquibot.rars import Rars
 #    MAIN
 # ───────────────────────────────────────
 
-
-def check_string(offset, var, cadena_esperada):
-
-    # -- Leer la cadena
-    cad = Rars.load_string(offset)
-
-    # -- Comprobar si es la cadena esperada
-    if cad == cadena_esperada:
-        print(f"> ✅️ {var}: {cadena_esperada} ")
-    else:
-        print(f"> ❌️ {var}: {cad}\n"
-              f"     Debería ser: {cadena_esperada}")
-        Rars.errors = True
-
+# -- Valores esperados para las cadenas
+CAD_ORIGEN_ESPERADA = "hola\n"
+CAD_DESTINO_ESPERADA = "HOLA"
 
 # -- Valores esperados para la salida en consola
 SALIDA_ESPERADA = [
     "Introduce cadena de prueba: Cadena copiada y convertida: HOLA",
     "Introduce cadena de prueba: \nCadena copiada y convertida: HOLA",
 ]
-
-CAD_ORIGEN_ESPERADA = "hola\n"
-CAD_DESTINO_ESPERADA = "HOLA"
 
 # -- Preparar el contexto
 Rars(
@@ -42,10 +28,10 @@ Rars(
 Rars.print_section("Comprobando cadenas")
 
 # -- Comprobar cadena destino
-check_string(0, "Destino", CAD_DESTINO_ESPERADA)
+Rars.check_string(0, CAD_DESTINO_ESPERADA, var_name="Destino")
 
-# -- Cadena origen
-check_string(10, "Origen", CAD_ORIGEN_ESPERADA)
+# -- Comprobar Cadena origen
+Rars.check_string(10, CAD_ORIGEN_ESPERADA, var_name="Origen")
 
 # -- Comprobar la salida del programa
 Rars.check_console_output(SALIDA_ESPERADA)

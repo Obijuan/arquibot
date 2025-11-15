@@ -695,6 +695,42 @@ class Rars:
         return cad
 
     # ──────────────────────────────────────────────────────────────────────
+    # ── CHECK_STRING()
+    # ──
+    # ──  ENTRADAS:
+    # ──    - offset: Byte donde comienza la cadena en el segmento de datos
+    # ──    - cadena_esperada: Valor correcto de la cadena
+    # ──    - var_name: Nombre de la variable cadena
+    # ──    - only_check: Solo se realiza la comparación, y se devuelve
+    # ──      el resultado. Pero no se muestra en la consola
+    # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
+    def check_string(offset,
+                     cadena_esperada,
+                     var_name="cad",
+                     only_check=False) -> bool:
+
+        # -- Leer la cadena
+        cad = Rars.load_string(offset)
+
+        # -- Realizar la comprobacion
+        check_result = (cad == cadena_esperada)
+
+        # -- Modo solo comprobacion
+        if only_check:
+            return check_result
+
+        # -- Modo normal: Comprobar y mostrar salida
+        if check_result:
+            print(f"> ✅️ {var_name}: {cadena_esperada} ")
+        else:
+            print(f"> ❌️ {var_name}: {cad}\n"
+                  f"     Debería ser: {cadena_esperada}")
+            Rars.errors = True
+
+        return check_result
+
+    # ──────────────────────────────────────────────────────────────────────
     # ── EXIT. Terminar. Mostrar las instrucciones, ciclos y bonus
     # ──────────────────────────────────────────────────────────────────────
     @staticmethod
