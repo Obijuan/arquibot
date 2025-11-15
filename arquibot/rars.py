@@ -612,9 +612,9 @@ class Rars:
             print("> ✅️ ¡Salida exacta!")
         else:
             Rars.errors = True
-            print("> ❌️ Salida NO exacta")
             print(f"  Salida esperada: {posible_outputs[0]}")
             print(f"  Salida generada: {Rars.stdout}")
+            print("> ❌️ Salida NO exacta")
 
     # ──────────────────────────────────────────────────────────────────────
     # ── EXIT. Terminar. Mostrar las instrucciones, ciclos y bonus
