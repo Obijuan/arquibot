@@ -608,8 +608,8 @@ class Rars:
 
         # -- Comprobar salida del programa
         if Rars.stdout in posible_outputs:
+            print(f"{ansi.GREEN}{Rars.stdout}{ansi.DEFAULT}")
             print("> ✅️ ¡Salida exacta!")
-            print(f"  Salida:\n  {Rars.stdout}")
         else:
             Rars.errors = True
             print("> ❌️ Salida NO exacta")
