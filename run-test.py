@@ -14,6 +14,7 @@ SALIDA_ESPERADA = [
 # -- Preparar el contexto
 Rars(
       "asm/spacefin.s",     # -- Main
+      "asm/ecall.s",        # -- Include
       expected_data=True,   # -- Segmento de datos
       input="TEST     \n",  # -- Entrada estandar
       tipo_bonus=Rars.BONUS_CICLOS,

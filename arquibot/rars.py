@@ -32,6 +32,9 @@ class Rars:
     # ── Nombre del fichero MAIN a ensamblar
     MAIN_ASM = "main.s"
 
+    # ── Nombre de un fichero a incluir
+    INCLUDE_ASM = "asm/so.s"
+
     # Tipo enumerado para indicar el tipo de bonus
     BONUS_INSTRUCCIONES = 0
     BONUS_CICLOS = 1
@@ -83,6 +86,7 @@ class Rars:
     # ── CONSTRUCTOR
     # ── Entradas:
     # ──  * main: Nombre del fichero ensamblador principal
+    # ──  * include: Nombre del fichero a incluir
     # ──  * expected_data: Indicar si el programa debe tener segmento de datos
     # ──  * input: Texto a enviar por la entrada estandar
     # ──  * tipo_bonus: Tipo de bonus
@@ -93,6 +97,7 @@ class Rars:
     # ───────────────────────────────────────────────────────────────────────
     def __init__(self,
                  main: str,
+                 include: str = "",
                  expected_data: bool = False,
                  input: str = "",
                  tipo_bonus: int = BONUS_INSTRUCCIONES,
@@ -100,6 +105,7 @@ class Rars:
 
         # -- Guardar los parametros pasados
         Rars.MAIN_ASM = main
+        Rars.INCLUDE_ASM = include
         Rars.EXPECTED_DATA = expected_data
         Rars.input = input
         Rars.tipo_bonus = tipo_bonus
@@ -119,6 +125,9 @@ class Rars:
 
         # --- Comprobar si el fichero asm existe
         Rars.check_main_asm()
+
+        # --- Comprobar si el fichero a incluir existe
+        Rars.check_include_asm()
 
         # -- Ejecutar el Rars!
         Rars.exec()
@@ -277,6 +286,24 @@ class Rars:
                              " no encontrado", violation=True)
             print()
             sys.exit()
+
+    # ──────────────────────────────────────────────────
+    # ── CHECK_INCLUDE_ASM.  Comprobar si el fichero
+    # ── a incluir existe
+    # ──────────────────────────────────────────────────
+    @staticmethod
+    def check_include_asm():
+
+        # --- Comprobar si el fichero a incluir existe
+        if Rars.INCLUDE_ASM != "":
+            if os.path.exists(Rars.INCLUDE_ASM):
+                print(f"> ✅️ {Rars.INCLUDE_ASM} existe")
+            else:
+                Rars.print_error(f"{ansi.YELLOW}{Rars.INCLUDE_ASM}"
+                                 f"{ansi.LWHITE}"
+                                 f" no encontrado", violation=True)
+                print()
+                sys.exit()
 
     # ──────────────────────────────────────────────────
     # ── EXEC.  Ejecutar el RARs
