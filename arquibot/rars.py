@@ -498,7 +498,12 @@ class Rars:
 
         # -- Leer los ciclos
         # -- Se encuentran en la linea 2
-        Rars.ciclos = int(contenido[2])
+        try:
+            Rars.ciclos = int(contenido[2])
+        except ValueError:
+            # -- Si hay error en su lectura,
+            # -- ponemos los ciclos a 0
+            Rars.ciclos = 0
 
         # -- Lectura de los registros
         # -- Los registros empiezan en la linea 3
