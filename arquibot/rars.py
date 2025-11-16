@@ -758,6 +758,11 @@ class Rars:
         print(f"> Instrucciones totales: {Rars.instrucciones}")
         print(f"> Ciclos de ejecución: {Rars.ciclos}")
 
+        # -- Comprobar si se superan los ciclos máximo
+        # -- Si es asi, significa que hay un bucle infinito
+        if Rars.ciclos >= Rars.MAX_STEPS:
+            Rars.print_error("Ciclos máximos excedidos. BUCLE INFINITO")
+
         # -- Comprobar BONUS
         # -- Solo si no hay errores previos
         if not Rars.errors and Rars.bonus > 0:
