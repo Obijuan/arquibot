@@ -13,6 +13,7 @@ CAD_DESTINO_ESPERADA = "HOLA"
 SALIDA_ESPERADA = [
     "Introduce cadena de prueba: Cadena copiada y convertida: HOLA",
     "Introduce cadena de prueba: \nCadena copiada y convertida: HOLA",
+    "Introduce cadena de prueba:Cadena copiada y convertida:HOLA"
 ]
 
 # -- Preparar el contexto
