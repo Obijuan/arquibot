@@ -373,10 +373,13 @@ class Rars:
             print(f"🔹️Línea: {linea}")
             print(f"🔹️Dirección: {address}")
             print(f"🔹️Error: {msg}")
-            print()
-            error_output_list = Rars.stderr.split("\n")
-            print(ansi.RED + f"{error_output_list[0]}\n" + ansi.DEFAULT)
-            sys.exit(1)
+
+            # -- Debug
+            # error_output_list = Rars.stderr.split("\n")
+            # print(ansi.RED + f"{error_output_list[0]}\n" + ansi.DEFAULT)
+
+            # -- Si hay un error de runtime, se aborta
+            Rars.abort()
 
     # ────────────────────────────────────────────────────────────
     # ── CHECK_asm_errors.  Comprobar errores de ensamblado
