@@ -29,9 +29,6 @@ class Rars:
     # ── Numero maximo de ciclos a probar
     MAX_STEPS = 10000
 
-    # ── Nombre del fichero MAIN a ensamblar
-    MAIN_ASM = "main.s"
-
     # ── Nombre de un fichero a incluir
     INCLUDE_ASM = "asm/so.s"
 
@@ -103,13 +100,18 @@ class Rars:
                  tipo_bonus: int = BONUS_INSTRUCCIONES,
                  bonus: int = 0):
 
-        # -- Guardar los parametros pasados
-        Rars.MAIN_ASM = main
+        # ------ Guardar los parametros pasados
+
+        # ── Nombre del fichero MAIN a ensamblar
+        self.main_asm = main
         Rars.INCLUDE_ASM = include
         Rars.EXPECTED_DATA = expected_data
         Rars.input = input
         Rars.tipo_bonus = tipo_bonus
         Rars.bonus = bonus
+
+        # -- Estado del test
+        self.ok = False
 
         # ── Mostrar el encabezado
         Rars.show_header()
@@ -124,13 +126,15 @@ class Rars:
         Rars.delete_text()
 
         # --- Comprobar si el fichero asm existe
-        Rars.check_main_asm()
+        ok = self.check_main_asm()
+        if not ok:
+            return
 
         # --- Comprobar si el fichero a incluir existe
         Rars.check_include_asm()
 
         # -- Ejecutar el Rars!
-        Rars.exec()
+        self.exec()
 
         # -- Comprobar si hay runtime error
         Rars.check_runtime_error()
@@ -277,15 +281,15 @@ class Rars:
     # ── CHECK_MAIN_ASM.  Comprobar si el fichero asm
     # ── principal existe
     # ──────────────────────────────────────────────────
-    @staticmethod
-    def check_main_asm():
-        if os.path.exists(Rars.MAIN_ASM):
-            print(f"> ✅️ {Rars.MAIN_ASM} existe")
+    def check_main_asm(self) -> bool:
+        if os.path.exists(self.main_asm):
+            print(f"> ✅️ {self.main_asm} existe")
+            return True
         else:
-            Rars.print_error(f"{ansi.YELLOW}{Rars.MAIN_ASM}{ansi.LWHITE}"
+            Rars.print_error(f"{ansi.YELLOW}{self.main_asm}{ansi.LWHITE}"
                              " no encontrado", violation=True)
             print()
-            sys.exit()
+            return False
 
     # ──────────────────────────────────────────────────
     # ── CHECK_INCLUDE_ASM.  Comprobar si el fichero
@@ -308,15 +312,14 @@ class Rars:
     # ──────────────────────────────────────────────────
     # ── EXEC.  Ejecutar el RARs
     # ──────────────────────────────────────────────────
-    @staticmethod
-    def exec():
+    def exec(self):
 
         # -- Obtener la direccion final del segmento de datos
         data_orig = 0x10010000  # -- Direccion inicial seg. datos
         data_end = data_orig + Rars.DATA_SIZE
 
         # -- Probando fichero fuente
-        print(f"> Probando: {Rars.MAIN_ASM}")
+        print(f"> Probando: {self.main_asm}")
 
         # -- Comando a ejecutar
         cmd_str = f"java -jar {Rars.NAME} "\
@@ -325,7 +328,7 @@ class Rars:
                   f"x25 x26 x27 x28 x29 x30 x31 "\
                   f"nc me ic {Rars.MAX_STEPS} "\
                   f"dump 0x10010000-0x{data_end:x} HexText {Rars.DATA} "\
-                  f"dump .text HexText {Rars.TEXT} {Rars.MAIN_ASM}"
+                  f"dump .text HexText {Rars.TEXT} {self.main_asm}"
 
         # -- Convertirlo a lista, colocando cada argumento en un item
         # -- Necesario para ejecutar el comando con subprocess.run()
