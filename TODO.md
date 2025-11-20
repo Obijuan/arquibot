@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] Test para include
 - [ ] Test para entrada
 - [ ] Test para bonus (instrucciones)
 - [ ] Test para bonus (ciclos)
