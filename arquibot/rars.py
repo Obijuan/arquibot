@@ -728,6 +728,9 @@ class Rars:
         if only_check:
             return check_result
 
+        # -- Eliminar saltos de linea para mostrar en consola
+        cadena_esperada = cadena_esperada.replace("\n", "\\n")
+
         # -- Modo normal: Comprobar y mostrar salida
         if check_result:
             print(f'> ✅️ {var_name}: "{cadena_esperada}" ')
