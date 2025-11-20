@@ -1,8 +1,8 @@
 # TODO
 
-- [ ] Gestionar bucles infinitos. Si se alcanza el numero maximo de
+- [x] Gestionar bucles infinitos. Si se alcanza el numero maximo de
       ciclos, estamos en bucle infinito: Mostrar mensaje con error X
       (Comprobar con Alejandro Linde)
-- [ ] Caso de ángela Garrido. Peta! Si no ensambla, hay que terminar
+- [x] Caso de ángela Garrido. Peta! Si no ensambla, hay que terminar
       no se puede comprobar cadenas....
       
