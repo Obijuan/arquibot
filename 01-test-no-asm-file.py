@@ -7,6 +7,3 @@ from arquibot.rars import Rars
 
 # ── Comenzar la comprobación
 Rars("asm/wrong-file.s")
-
-# ── Terminar
-Rars.exit()
