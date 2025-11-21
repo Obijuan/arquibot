@@ -119,6 +119,32 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 4: OK")
 
+    def test_data_1word(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # ── Una única palabra en el segmento de datos
+            test = Rars("asm/test-data-1word.s", expected_data=True)
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ Hay segmento de datos"
+            ERROR1 = "❌️ ERROR: No hay segmento de CODIGO!"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(ERROR1, salida)
+
+            # ── Comprobar rars falla
+            self.assertFalse(test.ok)
+
+        print("✅ Test 5: OK")
+
 
 if __name__ == "__main__":
     unittest.main()

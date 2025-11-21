@@ -7,7 +7,4 @@ from arquibot.rars import Rars
 # ─────────────────────────────────────────────────
 
 # ── Comenzar la comprobación
-Rars("asm/data-1word.s", expected_data=True)
-
-# ── Terminar
-Rars.exit()
+Rars("asm/test-data-1word.s", expected_data=True)

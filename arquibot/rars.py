@@ -47,14 +47,6 @@ class Rars:
     # ── Numero de bytes a volcar del segmento de datos
     DATA_SIZE = 256
 
-    # ── Guardar las salidas del rars y del programa
-    # ── Al ejecutar el Rars
-    stderr = ""
-    stdout = ""
-
-    # ── Texto enviado por la entrada estandar
-    input = ""
-
     # ── ciclos
     ciclos = 0
 
@@ -89,14 +81,12 @@ class Rars:
                  bonus: int = 0):
 
         # ──────── Guardar los parametros pasados
-
-        # ── Nombre del fichero MAIN a ensamblar
         self.main_asm = main
-        Rars.INCLUDE_ASM = include
         self.expected_data = expected_data
-        Rars.input = input
+        self.input = input
         Rars.tipo_bonus = tipo_bonus
         Rars.bonus = bonus
+        Rars.INCLUDE_ASM = include
 
         # ── Estado del test
         self.ok = False
@@ -109,6 +99,11 @@ class Rars:
 
         # ── El programa analizado tiene segmento de datos
         self.has_data = False
+
+        # ── Guardar las salidas del rars y del programa
+        # ── Al ejecutar el Rars
+        self.stderr = ""
+        self.stdout = ""
 
         # ── Mostrar el encabezado
         Rars.show_header()
@@ -345,7 +340,7 @@ class Rars:
         resultado = subprocess.run(
             cmd,
             text=True,         # -- Entrada y salida son cadenas de texto
-            input=Rars.input,  # -- Cadena para la entrada estandar
+            input=self.input,  # -- Cadena para la entrada estandar
             stdout=subprocess.PIPE,  # -- Salida estandar
             stderr=subprocess.PIPE   # -- Salida de error
         )
