@@ -5,8 +5,8 @@ from io import StringIO
 from arquibot.rars import Rars
 
 # Patrón de expresión regular para eliminar secuencias ANSI
-# Detecta cualquier secuencia que comience con \033[ (ESC[) 
-# y termine en una letra
+# Detecta cualquier secuencia que comience con
+# \033[(ESC[) y termine en una letra
 ANSI_ESCAPE = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
 
 
@@ -66,6 +66,35 @@ class TestRars(unittest.TestCase):
             self.assertFalse(test.ok)
 
         print("✅ Test 2: OK")
+
+    def test_blank_data(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # ── Comprobar con un archivo en blanco, que solo
+            # tiene el segmento de datos, pero en blanco
+            test = Rars("asm/test-blank-data.s", expected_data=True)
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "❌️ ERROR: No hay segmento de DATOS"
+            ERROR1 = "❌️ ERROR: No hay segmento de CODIGO!"
+            ERROR2 = "❌️ ERROR: No hay EXIT"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(ERROR1, salida)
+            self.assertIn(ERROR2, salida)
+
+            # ── Comprobar rars falla
+            self.assertFalse(test.ok)
+
+        print("✅ Test 3: OK")
 
 
 if __name__ == "__main__":

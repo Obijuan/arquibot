@@ -8,5 +8,4 @@ from arquibot.rars import Rars
 # ───────────────────────────────────────
 
 # ── Comenzar la comprobación
-# Rars("asm/blank.s", expected_data=True)
-Rars("asm/blank.s")
+Rars("asm/test-blank.s")
