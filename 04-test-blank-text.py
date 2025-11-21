@@ -8,7 +8,4 @@ from arquibot.rars import Rars
 # ───────────────────────────────────────
 
 # ── Comenzar la comprobación
-Rars("asm/blank-text.s")
-
-# ── Terminar
-Rars.exit()
+Rars("asm/test-blank-text.s")

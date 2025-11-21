@@ -40,21 +40,12 @@ class Rars:
     # ── Fichero donde volcar el segmento de código
     TEXT = "text.hex"
 
-    # ── El programa analizado tiene segmento de Codigo
-    HAS_TEXT = False
-
     # ────── SEGMENTO DE DATOS
     # ── Fichero donde volcar el segmento de datos
     DATA = "data.hex"
 
     # ── Numero de bytes a volcar del segmento de datos
     DATA_SIZE = 256
-
-    # ── Indicar si el programa debe tener segmento de datos o no
-    EXPECTED_DATA = False
-
-    # ── El programa analizado tiene segmento de datos
-    HAS_DATA = False
 
     # ── Guardar las salidas del rars y del programa
     # ── Al ejecutar el Rars
@@ -63,9 +54,6 @@ class Rars:
 
     # ── Texto enviado por la entrada estandar
     input = ""
-
-    # ── Indica si se han producido errores
-    errors = False
 
     # ── ciclos
     ciclos = 0
@@ -100,18 +88,27 @@ class Rars:
                  tipo_bonus: int = BONUS_INSTRUCCIONES,
                  bonus: int = 0):
 
-        # ------ Guardar los parametros pasados
+        # ──────── Guardar los parametros pasados
 
         # ── Nombre del fichero MAIN a ensamblar
         self.main_asm = main
         Rars.INCLUDE_ASM = include
-        Rars.EXPECTED_DATA = expected_data
+        self.expected_data = expected_data
         Rars.input = input
         Rars.tipo_bonus = tipo_bonus
         Rars.bonus = bonus
 
-        # -- Estado del test
+        # ── Estado del test
         self.ok = False
+
+        # ── Indica si se han producido errores
+        self.errors = False
+
+        # ── El programa analizado tiene segmento de Codigo
+        self.has_text = False
+
+        # ── El programa analizado tiene segmento de datos
+        self.has_data = False
 
         # ── Mostrar el encabezado
         Rars.show_header()
@@ -136,19 +133,25 @@ class Rars:
         # -- Ejecutar el Rars!
         self.exec()
 
-        # -- Comprobar si hay runtime error
-        Rars.check_runtime_error()
-
         # -- Comprobar si es un error de ensamblado
-        Rars.check_asm_errors()
+        ok = self.check_asm_errors()
+        if not ok:
+            return
 
         # -- Comprobar si se ha generado el fichero con el volcado de memoria
         # -- si no se ha generado es porque no se ha declaro el segmento
         # --- de datos
-        Rars.check_data()
+        self.check_data()
 
         # --- Comprobar si se ha generado el segmento de codigo
-        Rars.check_text()
+        ok = self.check_text()
+        if not ok:
+            return
+
+        # -- Comprobar si hay runtime error
+        ok = self.check_runtime_error()
+        if not ok:
+            return
 
         # ---- Leer la salida del Rars para obtener los registros y los ciclos
         # ---- Actualiza Rars.ciclos y Rars.regs
@@ -288,7 +291,7 @@ class Rars:
         else:
             Rars.print_error(f"{ansi.YELLOW}{self.main_asm}{ansi.LWHITE}"
                              " no encontrado", violation=True)
-            print()
+            self.abort()
             return False
 
     # ──────────────────────────────────────────────────
@@ -358,8 +361,7 @@ class Rars:
     # ── CHECK_runtime_error.  Comprobar los errores en tiempo
     # ── de ejecucion al ejecutar el RARs
     # ────────────────────────────────────────────────────────────
-    @staticmethod
-    def check_runtime_error():
+    def check_runtime_error(self) -> bool:
 
         # -- Comprobar si hay runtime error
         patron = r"Error in .*/([^/]+)\sline\s(\d+): "\
@@ -382,13 +384,20 @@ class Rars:
             # print(ansi.RED + f"{error_output_list[0]}\n" + ansi.DEFAULT)
 
             # -- Si hay un error de runtime, se aborta
-            Rars.abort()
+            self.abort()
+            return False
+
+        # -- No hay errores de runtime. Prueba ok
+        return True
 
     # ────────────────────────────────────────────────────────────
     # ── CHECK_asm_errors.  Comprobar errores de ensamblado
+    # ── DEVUELVE:
+    # ──   * true: Hay errores de ensamblado
+    # ─   * false: No hay errores de ensamblado (aunque puede haber
+    # ──            warnings)
     # ────────────────────────────────────────────────────────────
-    @staticmethod
-    def check_asm_errors():
+    def check_asm_errors(self) -> bool:
 
         # -- Detectar Warnings
         # Patrón de expresión regular:
@@ -420,25 +429,28 @@ class Rars:
             Rars.errors = True
 
             # -- Si hay un error de ensamblado, se aborta
-            Rars.abort()
+            self.abort()
+            return False
+
+        # -- No hay errores de ensamblado
+        return True
 
     # ────────────────────────────────────────────────────────────
     # ── CHECK_DATA.  Comprobar si se ha generado el fichero
     # ── con el volcado del segmento de datos
     # ────────────────────────────────────────────────────────────
-    @staticmethod
-    def check_data():
+    def check_data(self):
         # -- Comprobar si se ha generado el fichero con el volcado
         # -- de memoria. Si no se ha generado es porque no se ha declaro
         #  el segmento de datos
         if os.path.exists(Rars.DATA):
 
             # -- Tiene segmento de datos
-            Rars.HAS_DATA = True
+            self.has_data = True
 
             # -- Imprimir mensaje según si se espera o no que tenga
             # -- segmento de datos
-            if Rars.EXPECTED_DATA:
+            if self.expected_data:
                 # -- Se espera que tenga segmento de datos: OK
                 print("> ✅️ ", end='')
 
@@ -454,7 +466,7 @@ class Rars:
         else:
 
             # -- El enunciado requiere que HAYA segmento de datos
-            if Rars.EXPECTED_DATA:
+            if self.expected_data:
                 Rars.print_error("No hay segmento de DATOS", violation=True)
                 Rars.errors = True
 
@@ -466,17 +478,21 @@ class Rars:
     # ── CHECK_TEXT.  Comprobar si se ha generado el fichero
     # ── con el volcado del segmento de codigo
     # ────────────────────────────────────────────────────────────
-    @staticmethod
-    def check_text():
+    def check_text(self) -> bool:
         # -- Comprobar si se ha generado el fichero con el volcado
         # -- del segmento de codigo. Si no se ha generado es porque
         # -- el programa no tiene la directiva .text
         if os.path.exists(Rars.TEXT):
             print("> ✅️ Hay segmento de código")
-            Rars.HAS_TEXT = True
+            self.has_text = True
+            self.ok = True
+            return True
         else:
             Rars.print_error("No hay segmento de CODIGO!", violation=True)
-            Rars.errors = True
+            self.errors = True
+            self.ok = False
+            self.abort()
+            return False
 
     # ────────────────────────────────────────────────────────────
     # ── READ_VARIABLES. Leer el segmento de datos del fichero
@@ -748,12 +764,11 @@ class Rars:
     # ── ABORT. Abortar la prueba, porque se ha producido un error
     # ── grave
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def abort():
+    def abort(self):
         print("> 💔  Prueba abortada...")
         util.line(ansi.YELLOW, Rars.WIDTH)
         print()
-        sys.exit(1)
+        self.ok = False
 
     # ──────────────────────────────────────────────────────────────────────
     # ── EXIT. Terminar. Mostrar las instrucciones, ciclos y bonus

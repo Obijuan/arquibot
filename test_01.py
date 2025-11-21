@@ -56,11 +56,9 @@ class TestRars(unittest.TestCase):
             # ──────── Comprobar que la salida es la esperada
             MSG1 = "✅️ NO hay segmento de datos"
             ERROR1 = "❌️ ERROR: No hay segmento de CODIGO!"
-            ERROR2 = "❌️ ERROR: No hay EXIT"
 
             self.assertIn(MSG1, salida)
             self.assertIn(ERROR1, salida)
-            self.assertIn(ERROR2, salida)
 
             # ── Comprobar rars falla
             self.assertFalse(test.ok)
@@ -85,16 +83,41 @@ class TestRars(unittest.TestCase):
             # ──────── Comprobar que la salida es la esperada
             MSG1 = "❌️ ERROR: No hay segmento de DATOS"
             ERROR1 = "❌️ ERROR: No hay segmento de CODIGO!"
-            ERROR2 = "❌️ ERROR: No hay EXIT"
 
             self.assertIn(MSG1, salida)
             self.assertIn(ERROR1, salida)
-            self.assertIn(ERROR2, salida)
 
             # ── Comprobar rars falla
             self.assertFalse(test.ok)
 
         print("✅ Test 3: OK")
+
+    def test_blank_text(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # ── Comprobar con un archivo en blanco, que solo
+            # tiene el segmento de datos, pero en blanco
+            test = Rars("asm/test-blank-text.s")
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ NO hay segmento de datos"
+            ERROR1 = "❌️ ERROR: No hay segmento de CODIGO!"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(ERROR1, salida)
+
+            # ── Comprobar rars falla
+            self.assertFalse(test.ok)
+
+        print("✅ Test 4: OK")
 
 
 if __name__ == "__main__":
