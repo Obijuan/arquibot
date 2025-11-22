@@ -241,7 +241,7 @@ class TestRars(unittest.TestCase):
             MSG2 = "✅️ Hay segmento de código"
             ERROR1 = "❌️ ERROR: No hay EXIT"
             MSG3 = "Instrucciones totales: 1"
-            MSG4 = "Ciclos de ejecución: 0"
+            MSG4 = "Ciclos de ejecución: 1"
 
             self.assertIn(MSG1, salida)
             self.assertIn(MSG2, salida)

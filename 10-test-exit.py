@@ -6,7 +6,7 @@ from arquibot.rars import Rars
 # ─────────────────────────────────────────────────
 
 # ── Comenzar la comprobación
-Rars("asm/text-exit.s", expected_data=True)
+test = Rars("asm/text-exit.s", expected_data=True)
 
 # ── Terminar
-Rars.exit()
+test.exit()

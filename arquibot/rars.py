@@ -47,9 +47,6 @@ class Rars:
     # ── Numero de bytes a volcar del segmento de datos
     DATA_SIZE = 256
 
-    # ── ciclos
-    ciclos = 0
-
     # ── Numero de instrucciones
     instrucciones = 0
 
@@ -101,6 +98,9 @@ class Rars:
         # ── Al ejecutar el Rars
         self.stderr = ""
         self.stdout = ""
+
+        # ── ciclos
+        self.ciclos = 0
 
         # ── Registros
         self.regs = []
@@ -769,11 +769,11 @@ class Rars:
 
         # -- Mostrar informacion
         print(f"> Instrucciones totales: {Rars.instrucciones}")
-        print(f"> Ciclos de ejecución: {Rars.ciclos}")
+        print(f"> Ciclos de ejecución: {self.ciclos}")
 
         # -- Comprobar si se superan los ciclos máximo
         # -- Si es asi, significa que hay un bucle infinito
-        if Rars.ciclos >= Rars.MAX_STEPS:
+        if self.ciclos >= Rars.MAX_STEPS:
             Rars.print_error("Ciclos máximos excedidos. BUCLE INFINITO")
 
         # -- Comprobar BONUS
@@ -795,7 +795,7 @@ class Rars:
             if Rars.tipo_bonus == Rars.BONUS_CICLOS:
 
                 # -- Comprobar ciclos
-                if Rars.ciclos <= Rars.bonus:
+                if self.ciclos <= Rars.bonus:
                     print(f"  > ✅️ Máximo de {Rars.bonus} ciclos")
                     ok_bonus = True
                 else:
