@@ -615,6 +615,62 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 18: OK")
 
+    def test_string_3(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # -- Preparar el contexto
+            test = Rars(
+                      "asm/test-string3.s",  # -- Main
+                      expected_data=True,    # -- Segmento de datos
+                   )
+
+            Rars.print_section("Comprobando cadenas")
+
+            # -- Valores esperados para las cadena
+            CAD0_ESPERADA = "Cadena 0"
+            CAD1_ESPERADA = "Cadena 1"
+            CAD2_ESPERADA = "Cadena Test2"
+
+            # -- Comprobar cadenas
+            # -- Se pasa el offset y el valor esperado
+            test.check_string(0, CAD0_ESPERADA, var_name="Cad0")
+            test.check_string(9, CAD1_ESPERADA, var_name="Cad1")
+            test.check_string(18, CAD2_ESPERADA, var_name="Cad2")
+
+            # -- Terminar
+            test.exit()
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ Hay segmento de datos"
+            MSG2 = "✅️ Hay segmento de código"
+            MSG3 = '✅️ Cad0: "Cadena 0"'
+            MSG4 = '❌️ Cad1: "Cadena x"'
+            MSG5 = '✅️ Cad2: "Cadena Test2"'
+            MSG6 = "✅️ Se termina con EXIT"
+            MSG7 = "Instrucciones totales: 2"
+            MSG8 = "Ciclos de ejecución: 1"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+            self.assertIn(MSG3, salida)
+            self.assertIn(MSG4, salida)
+            self.assertIn(MSG5, salida)
+            self.assertIn(MSG6, salida)
+            self.assertIn(MSG7, salida)
+            self.assertIn(MSG8, salida)
+
+            # ── Comprobar que rars no ha fallado
+            self.assertTrue(test.ok)
+
+        print("✅ Test 19: OK")
+
 
 if __name__ == "__main__":
     unittest.main()
