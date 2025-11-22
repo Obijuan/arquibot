@@ -29,9 +29,6 @@ class Rars:
     # ── Numero maximo de ciclos a probar
     MAX_STEPS = 10000
 
-    # ── Nombre de un fichero a incluir
-    INCLUDE_ASM = "asm/so.s"
-
     # Tipo enumerado para indicar el tipo de bonus
     BONUS_INSTRUCCIONES = 0
     BONUS_CICLOS = 1
@@ -72,9 +69,9 @@ class Rars:
         self.main_asm = main
         self.expected_data = expected_data
         self.input = input
+        self.include_asm = include
         Rars.tipo_bonus = tipo_bonus
         Rars.bonus = bonus
-        Rars.INCLUDE_ASM = include
 
         # ── Estado del test
         self.ok = False
@@ -290,11 +287,11 @@ class Rars:
     def check_include_asm(self):
 
         # --- Comprobar si el fichero a incluir existe
-        if Rars.INCLUDE_ASM != "":
-            if os.path.exists(Rars.INCLUDE_ASM):
-                print(f"> ✅️ {Rars.INCLUDE_ASM} existe")
+        if self.include_asm != "":
+            if os.path.exists(self.include_asm):
+                print(f"> ✅️ {self.include_asm} existe")
             else:
-                self.print_error(f"{ansi.YELLOW}{Rars.INCLUDE_ASM}"
+                self.print_error(f"{ansi.YELLOW}{self.include_asm}"
                                  f"{ansi.LWHITE}"
                                  f" no encontrado", violation=True)
                 print()

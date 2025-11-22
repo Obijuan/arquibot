@@ -7,10 +7,10 @@ from arquibot.rars import Rars
 # ─────────────────────────────────────────────────
 
 # -- Preparar el contexto
-Rars(
-      "asm/test-include1.s",  # -- Main
-      "asm/servicios.s",  # -- Include
-    )
+test = Rars(
+            "asm/test-include1.s",  # -- Main
+            "asm/servicios.s",  # -- Include
+       )
 
 # -- Terminar
-Rars.exit()
+test.exit()

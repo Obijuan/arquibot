@@ -131,7 +131,7 @@ test17.check_string(0, CAD0_ESPERADA, var_name="Cadena 0")
 test17.exit()
 
 print("═════════════ TEST 18 ════════════════════════")
-test = Rars(
+test18 = Rars(
           "asm/test-string2.s",  # -- Main
           expected_data=True,    # -- Segmento de datos
       )
@@ -144,15 +144,15 @@ Rars.print_section("Comprobando cadenas")
 
 # -- Comprobar cadenas
 # -- Se pasa el offset y el valor esperado
-test.check_string(0, CAD0_ESPERADA, var_name="Cad0")
-test.check_string(9, CAD1_ESPERADA, var_name="Cad1")
+test18.check_string(0, CAD0_ESPERADA, var_name="Cad0")
+test18.check_string(9, CAD1_ESPERADA, var_name="Cad1")
 
 # -- Terminar
-test.exit()
+test18.exit()
 
 
 print("═════════════ TEST 19 ════════════════════════")
-test = Rars(
+test19 = Rars(
          "asm/test-string3.s",  # -- Main
          expected_data=True,    # -- Segmento de datos
        )
@@ -166,9 +166,19 @@ CAD2_ESPERADA = "Cadena Test2"
 
 # -- Comprobar cadenas
 # -- Se pasa el offset y el valor esperado
-test.check_string(0, CAD0_ESPERADA, var_name="Cad0")
-test.check_string(9, CAD1_ESPERADA, var_name="Cad1")
-test.check_string(18, CAD2_ESPERADA, var_name="Cad2")
+test19.check_string(0, CAD0_ESPERADA, var_name="Cad0")
+test19.check_string(9, CAD1_ESPERADA, var_name="Cad1")
+test19.check_string(18, CAD2_ESPERADA, var_name="Cad2")
 
 # -- Terminar
-test.exit()
+test19.exit()
+
+
+print("═════════════ TEST 20 ════════════════════════")
+test20 = Rars(
+            "asm/test-include1.s",  # -- Main
+            "asm/servicios.s",  # -- Include
+       )
+
+# -- Terminar
+test20.exit()

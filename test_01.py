@@ -671,6 +671,45 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 19: OK")
 
+    def test_include_1(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            test = Rars(
+                        "asm/test-include1.s",  # -- Main
+                        "asm/servicios.s",  # -- Include
+                    )
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ asm/test-include1.s existe"
+            MSG2 = "✅️ asm/servicios.s existe"
+            MSG3 = '✅️ NO hay segmento de datos'
+            MSG4 = '✅️ Hay segmento de código'
+            MSG5 = "✅️ Se termina con EXIT"
+            MSG6 = "Instrucciones totales: 2"
+            MSG7 = "Ciclos de ejecución: 1"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+            self.assertIn(MSG3, salida)
+            self.assertIn(MSG4, salida)
+            self.assertIn(MSG5, salida)
+            self.assertIn(MSG6, salida)
+            self.assertIn(MSG7, salida)
+
+            # ── Comprobar que rars no ha fallado
+            self.assertTrue(test.ok)
+
+        print("✅ Test 20: OK")
+
 
 if __name__ == "__main__":
     unittest.main()
