@@ -33,10 +33,10 @@ test = Rars(
 Rars.print_section("Comprobando cadenas")
 
 # -- Comprobar cadena destino
-Rars.check_string(0, CAD_DESTINO_ESPERADA, var_name="Destino")
+test.check_string(0, CAD_DESTINO_ESPERADA, var_name="Destino")
 
 # -- Comprobar Cadena origen
-Rars.check_string(10, CAD_ORIGEN_ESPERADA, var_name="Origen")
+test.check_string(10, CAD_ORIGEN_ESPERADA, var_name="Origen")
 
 # -- Comprobar la salida del programa
 test.check_console_output(SALIDA_ESPERADA)

@@ -13,10 +13,10 @@ data_ok = {
 }
 
 # ── Comenzar la comprobación
-Rars("asm/variables.s", expected_data=True)
+test = Rars("asm/test-variables.s", expected_data=True)
 
 # ── Comprobar los valores de las variables
-Rars.check_variables(data_ok)
+test.check_variables(data_ok)
 
 # ── Terminar
-Rars.exit()
+test.exit()

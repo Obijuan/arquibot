@@ -23,3 +23,16 @@ test10.exit()
 
 test11 = Rars("asm/test-text-syntax-error.s", expected_data=True)
 test11.exit()
+
+# ────────── TEST 12 ────────────────
+test12 = Rars("asm/test-variables.s", expected_data=True)
+
+# ── Valores esperados para las variables
+data_ok = {
+    "a": 1,
+    "b": 2,
+    "f": 3
+}
+# ── Comprobar los valores de las variables
+test12.check_variables(data_ok)
+test12.exit()

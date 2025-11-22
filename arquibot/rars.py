@@ -47,9 +47,6 @@ class Rars:
     # ── Numero de bytes a volcar del segmento de datos
     DATA_SIZE = 256
 
-    # ── Variables
-    variables = []
-
     # ───────────────────────────────────────────────────────────────────────
     # ── CONSTRUCTOR
     # ── Entradas:
@@ -105,12 +102,15 @@ class Rars:
         # ── Registros
         self.regs = []
 
+        # ── Variables
+        self.variables = []
+
         # ── Mostrar el encabezado
         Rars.show_header()
 
         # -- Comprobar si el rars existe
         # -- Si no es asi se descarga
-        Rars.check()
+        self.check()
 
         # -- Borrar los archivos temporales generados
         # -- en ejecuciones anteriores
@@ -123,7 +123,7 @@ class Rars:
             return
 
         # --- Comprobar si el fichero a incluir existe
-        Rars.check_include_asm()
+        self.check_include_asm()
 
         # -- Ejecutar el Rars!
         self.exec()
@@ -156,7 +156,7 @@ class Rars:
         self.process_code()
 
         # -- Leer todas las variables del segmento de datos
-        Rars.read_variables()
+        self.read_variables()
 
     # ────────────────────────────────────────────────────────
     # ── Imprimir el encabezado de ARQUI-BOTS
@@ -177,11 +177,10 @@ class Rars:
     # ──    * violation: Indica si mostrar mensaje dicion de violacion de
     # ──                 especificaciones
     # ────────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def print_error(emsg: str, violation: bool = False):
+    def print_error(self, emsg: str, violation: bool = False):
 
         print(f"> ❌️ {ansi.RED}ERROR: {ansi.LWHITE}{emsg}{ansi.DEFAULT}")
-        Rars.errors = True
+        self.errors = True
         if violation:
             print(f"{ansi.LMAGENTA}     🔥️ VIOLACION DE ESPECIFICACIONES")
             print(f"{ansi.DEFAULT}", end='', flush=True)
@@ -202,8 +201,7 @@ class Rars:
     # ── No se comprueba si ya existe en el directorio
     # ── el ejecutable
     # ──────────────────────────────────────────────────
-    @staticmethod
-    def download():
+    def download(self):
 
         # ── Realizar la descarga!
         print("  > Descargando RARS")
@@ -213,7 +211,7 @@ class Rars:
 
             # -- No hay Rars. Terminar!
             # -- NO hay conexion a Internet
-            Rars.print_error("No se puede descargar el RARs")
+            self.print_error("No se puede descargar el RARs")
             print("> Abortando...\n")
             sys.exit(1)
 
@@ -244,11 +242,10 @@ class Rars:
     # ── CHECK. Comprobar si el rars existe
     # ── si es así, se descarga!
     # ──────────────────────────────────────────────────
-    @staticmethod
-    def check():
-        if not Rars.exists():
+    def check(self):
+        if not self.exists():
             print("> 🤚 RARS no existe")
-            Rars.download()
+            self.download()
 
         print("> ☑️  RARS EXISTE")
 
@@ -281,7 +278,7 @@ class Rars:
             print(f"> ✅️ {self.main_asm} existe")
             return True
         else:
-            Rars.print_error(f"{ansi.YELLOW}{self.main_asm}{ansi.LWHITE}"
+            self.print_error(f"{ansi.YELLOW}{self.main_asm}{ansi.LWHITE}"
                              " no encontrado", violation=True)
             self.abort()
             return False
@@ -290,15 +287,14 @@ class Rars:
     # ── CHECK_INCLUDE_ASM.  Comprobar si el fichero
     # ── a incluir existe
     # ──────────────────────────────────────────────────
-    @staticmethod
-    def check_include_asm():
+    def check_include_asm(self):
 
         # --- Comprobar si el fichero a incluir existe
         if Rars.INCLUDE_ASM != "":
             if os.path.exists(Rars.INCLUDE_ASM):
                 print(f"> ✅️ {Rars.INCLUDE_ASM} existe")
             else:
-                Rars.print_error(f"{ansi.YELLOW}{Rars.INCLUDE_ASM}"
+                self.print_error(f"{ansi.YELLOW}{Rars.INCLUDE_ASM}"
                                  f"{ansi.LWHITE}"
                                  f" no encontrado", violation=True)
                 print()
@@ -407,18 +403,18 @@ class Rars:
             msg = coincidencia.group(2).strip()
             print(f"  🔹️ {ansi.YELLOW}{msg}{ansi.DEFAULT}")
             print(f"  🔹️ {ansi.BLUE}Línea: {linea}{ansi.DEFAULT}")
-            Rars.errors = True
+            self.errors = True
 
         # -- Detectar errores
         patron = r"Error in .*/[^/]+\sline\s(\d+).+: (.+)"
         resultado = re.search(patron, self.stderr)
         if resultado:
-            Rars.print_error("El programa NO ensambla 😱️😱️")
+            self.print_error("El programa NO ensambla 😱️😱️")
             linea = resultado.group(1)
             msg = resultado.group(2)
             print(f"  🔹️ {ansi.RED}{msg}{ansi.DEFAULT}")
             print(f"  🔹️ {ansi.BLUE}Línea: {linea}{ansi.DEFAULT}")
-            Rars.errors = True
+            self.errors = True
 
             # -- Si hay un error de ensamblado, se aborta
             self.abort()
@@ -459,8 +455,8 @@ class Rars:
 
             # -- El enunciado requiere que HAYA segmento de datos
             if self.expected_data:
-                Rars.print_error("No hay segmento de DATOS", violation=True)
-                Rars.errors = True
+                self.print_error("No hay segmento de DATOS", violation=True)
+                self.errors = True
 
             # -- No tiene segmento de datos, y el enunciado NO lo requiere
             else:
@@ -480,7 +476,7 @@ class Rars:
             self.ok = True
             return True
         else:
-            Rars.print_error("No hay segmento de CODIGO!", violation=True)
+            self.print_error("No hay segmento de CODIGO!", violation=True)
             self.errors = True
             self.ok = False
             self.abort()
@@ -490,8 +486,7 @@ class Rars:
     # ── READ_VARIABLES. Leer el segmento de datos del fichero
     # ── generado y devolver una lista con ellas
     # ────────────────────────────────────────────────────────────
-    @staticmethod
-    def read_variables():
+    def read_variables(self):
         try:
             # -- Leer el fichero con el segmento de datos
             # -- Se lee como una cadena de texto
@@ -515,7 +510,7 @@ class Rars:
                 variables.append(int(val, 16))
 
         # -- Guardar las variables
-        Rars.variables = variables
+        self.variables = variables
 
         # -- Devolver la lista de variables
         return variables
@@ -590,8 +585,8 @@ class Rars:
     def check_exit(self):
         # --- Comprobar si el programa no termina de forma controlada
         if "dropping off" in self.stderr:
-            Rars.print_error("No hay EXIT")
-            Rars.errors = True
+            self.print_error("No hay EXIT")
+            self.errors = True
 
         # --- Comprobar si el programa termina con normalidad, llamando a EXIT
         if "calling exit" in self.stderr:
@@ -611,21 +606,20 @@ class Rars:
     # ── ENTRADA:
     # ──   * data_ok: Diccionario con las variables y sus valores correctos
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def check_variables(data_ok: dict):
+    def check_variables(self, data_ok: dict):
 
-        Rars.print_section("Comprobando variables")
+        self.print_section("Comprobando variables")
 
         i = 0
         for var, value_ok in data_ok.items():
 
-            data = Rars.variables[i]
+            data = self.variables[i]
             if data == value_ok:
                 print(f"> ✅️ {var} = {data} ({hex(data)}) ")
             else:
                 print(f"> ❌️ {var}: {hex(data)}."
                       f"Debería ser: {hex(value_ok)}")
-                Rars.errors = True
+                self.errors = True
 
             i += 1
 
@@ -650,14 +644,14 @@ class Rars:
     # ──────────────────────────────────────────────────────────────────────
     def check_console_output(self, posible_outputs: list[str]):
 
-        Rars.print_section("Comprobando salida en consola")
+        self.print_section("Comprobando salida en consola")
 
         # -- Comprobar salida del programa
         if self.stdout in posible_outputs:
             print(f"{ansi.GREEN}{self.stdout}{ansi.DEFAULT}")
             print("> ✅️ ¡Salida exacta!")
         else:
-            Rars.errors = True
+            self.errors = True
             print(f'>  {ansi.GREEN}Salida esperada{ansi.DEFAULT}: \n'
                   f'"{posible_outputs[0]}"')
             print(f'>  {ansi.RED}Salida generada{ansi.DEFAULT}: \n'
@@ -670,8 +664,7 @@ class Rars:
     # ──  Leer un byte del offset de memoria
     # ──  de datos indicado. Ej. offset 0 = dir 0x10010000
     # ──────────────────────────────────────────────────────
-    @staticmethod
-    def load_byte(off: int) -> int:
+    def load_byte(self, off: int) -> int:
 
         # -- Obtener direccion de palabra
         dir_word = off >> 2
@@ -680,7 +673,7 @@ class Rars:
         nbyte = off & 0x3
 
         # -- Leer la palabra
-        word = Rars.variables[dir_word]
+        word = self.variables[dir_word]
 
         # -- Obtener el byte
         byte = (word >> (nbyte * 8)) & 0xFF
@@ -694,11 +687,10 @@ class Rars:
     # ──  Leer una cadena a partir del offset indicado del
     # ──  segmento de datos. Ej. offset 0 = dir 0x10010000
     # ──────────────────────────────────────────────────────
-    @staticmethod
-    def load_string(offset: int) -> str:
+    def load_string(self, offset: int) -> str:
         cad = ""
         while True:
-            byte = Rars.load_byte(offset)
+            byte = self.load_byte(offset)
             if byte == 0:
                 break
             # print(f"Offset: {offset:x}, Byte: {byte:x}")
@@ -717,14 +709,14 @@ class Rars:
     # ──    - only_check: Solo se realiza la comparación, y se devuelve
     # ──      el resultado. Pero no se muestra en la consola
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def check_string(offset,
+    def check_string(self,
+                     offset,
                      cadena_esperada,
                      var_name="cad",
                      only_check=False) -> bool:
 
         # -- Leer la cadena
-        cad = Rars.load_string(offset)
+        cad = self.load_string(offset)
 
         # -- Realizar la comprobacion
         check_result = (cad == cadena_esperada)
@@ -742,7 +734,7 @@ class Rars:
         else:
             print(f'> ❌️ {var_name}: "{cad}"\n'
                   f'     Debería ser: "{cadena_esperada}"')
-            Rars.errors = True
+            self.errors = True
 
         return check_result
 
@@ -765,7 +757,7 @@ class Rars:
         if not self.ok:
             return
 
-        Rars.print_section("Comprobaciones finales")
+        self.print_section("Comprobaciones finales")
 
         # -- Comprobar como se ha realizado la salida del programa
         self.check_exit()
@@ -777,7 +769,7 @@ class Rars:
         # -- Comprobar si se superan los ciclos máximo
         # -- Si es asi, significa que hay un bucle infinito
         if self.ciclos >= Rars.MAX_STEPS:
-            Rars.print_error("Ciclos máximos excedidos. BUCLE INFINITO")
+            self.print_error("Ciclos máximos excedidos. BUCLE INFINITO")
 
         # -- Comprobar BONUS
         # -- Solo si no hay errores previos

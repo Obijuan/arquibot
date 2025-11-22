@@ -311,6 +311,55 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 11: OK")
 
+    def test_variables(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # ── Programa con una variable y una unica instruccion
+            test = Rars("asm/test-variables.s", expected_data=True)
+
+            # ── Valores esperados para las variables
+            data_ok = {
+                "a": 1,
+                "b": 2,
+                "f": 3
+            }
+
+            # ── Comprobar los valores de las variables
+            test.check_variables(data_ok)
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ Hay segmento de datos"
+            MSG2 = "✅️ Hay segmento de código"
+            MSG3 = "✅️ a = 1 (0x1)"
+            MSG4 = "✅️ b = 2 (0x2)"
+            MSG5 = "✅️ f = 3 (0x3)"
+            MSG6 = "✅️ Se termina con EXIT"
+            MSG7 = "Instrucciones totales: 2"
+            MSG8 = "Ciclos de ejecución: 1"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+            self.assertIn(MSG3, salida)
+            self.assertIn(MSG4, salida)
+            self.assertIn(MSG5, salida)
+            self.assertIn(MSG6, salida)
+            self.assertIn(MSG7, salida)
+            self.assertIn(MSG8, salida)
+
+            # ── Comprobar que rars no ha fallado
+            self.assertTrue(test.ok)
+
+        print("✅ Test 12: OK")
+
 
 if __name__ == "__main__":
     unittest.main()
