@@ -7,10 +7,10 @@ from arquibot.rars import Rars
 # ─────────────────────────────────────────────────
 
 # -- Se especifica un fichero include QUE NO EXISTE!
-Rars(
-      "asm/test-include1.s",    # -- Main
-      "asm/servicios-error.s",  # -- Include
-    )
+test = Rars(
+          "asm/test-include1.s",    # -- Main
+          "asm/servicios-error.s",  # -- Include
+       )
 
 # -- Terminar
-Rars.exit()
+test.exit()

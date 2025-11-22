@@ -120,7 +120,9 @@ class Rars:
             return
 
         # --- Comprobar si el fichero a incluir existe
-        self.check_include_asm()
+        ok = self.check_include_asm()
+        if not ok:
+            return
 
         # -- Ejecutar el Rars!
         self.exec()
@@ -284,7 +286,7 @@ class Rars:
     # ── CHECK_INCLUDE_ASM.  Comprobar si el fichero
     # ── a incluir existe
     # ──────────────────────────────────────────────────
-    def check_include_asm(self):
+    def check_include_asm(self) -> bool:
 
         # --- Comprobar si el fichero a incluir existe
         if self.include_asm != "":
@@ -294,8 +296,9 @@ class Rars:
                 self.print_error(f"{ansi.YELLOW}{self.include_asm}"
                                  f"{ansi.LWHITE}"
                                  f" no encontrado", violation=True)
-                print()
-                sys.exit()
+                self.abort()
+                return False
+        return True
 
     # ──────────────────────────────────────────────────
     # ── EXEC.  Ejecutar el RARs

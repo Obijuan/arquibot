@@ -710,6 +710,36 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 20: OK")
 
+    def test_include_2(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # -- Se especifica un fichero include QUE NO EXISTE!
+            test = Rars(
+                "asm/test-include1.s",    # -- Main
+                "asm/servicios-error.s",  # -- Include
+            )
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ asm/test-include1.s existe"
+            MSG2 = "❌️ ERROR: asm/servicios-error.s no encontrado"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+
+            # ── Comprobar que rars ha fallado
+            self.assertFalse(test.ok)
+
+        print("✅ Test 21: OK")
+
 
 if __name__ == "__main__":
     unittest.main()

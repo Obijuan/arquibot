@@ -182,3 +182,14 @@ test20 = Rars(
 
 # -- Terminar
 test20.exit()
+
+
+print("═════════════ TEST 21 ════════════════════════")
+# -- Se especifica un fichero include QUE NO EXISTE!
+test21 = Rars(
+            "asm/test-include1.s",    # -- Main
+            "asm/servicios-error.s",  # -- Include
+         )
+
+# -- Terminar
+test21.exit()
