@@ -644,6 +644,10 @@ class Rars:
     # ──────────────────────────────────────────────────────────────────────
     def check_console_output(self, posible_outputs: list[str]):
 
+        # -- Si la ejecución se había abortado, no hacer nada
+        if not self.ok:
+            return
+
         self.print_section("Comprobando salida en consola")
 
         # -- Comprobar salida del programa
