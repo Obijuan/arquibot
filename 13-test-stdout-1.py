@@ -6,10 +6,10 @@ from arquibot.rars import Rars
 # ─────────────────────────────────────────────────
 
 # ── Comenzar la comprobación
-Rars("asm/consola-out1.s", expected_data=True)
+test = Rars("asm/test-consola-out1.s", expected_data=True)
 
 # ── Mostrar la salida generada por el programa
-Rars.show_console_output()
+test.show_console_output()
 
 # ── Terminar
-Rars.exit()
+test.exit()

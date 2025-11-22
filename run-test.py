@@ -36,3 +36,13 @@ data_ok = {
 # ── Comprobar los valores de las variables
 test12.check_variables(data_ok)
 test12.exit()
+
+# ────────── TEST 13 ────────────────
+# ── Comenzar la comprobación
+test13 = Rars("asm/test-consola-out1.s", expected_data=True)
+
+# ── Mostrar la salida generada por el programa
+test13.show_console_output()
+
+# ── Terminar
+test13.exit()

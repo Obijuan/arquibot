@@ -360,6 +360,38 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 12: OK")
 
+    def test_stdout_1(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # ── Programa que imprime un mensaje en la consola
+            test = Rars("asm/test-consola-out1.s", expected_data=True)
+            test.show_console_output()
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ Hay segmento de datos"
+            MSG2 = "✅️ Hay segmento de código"
+            MSG3 = "Salida en consola"
+            MSG4 = "Test..."
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+            self.assertIn(MSG3, salida)
+            self.assertIn(MSG4, salida)
+
+            # ── Comprobar que rars no ha fallado
+            self.assertTrue(test.ok)
+
+        print("✅ Test 12: OK")
+
 
 if __name__ == "__main__":
     unittest.main()
