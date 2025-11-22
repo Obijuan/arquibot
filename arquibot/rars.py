@@ -749,7 +749,7 @@ class Rars:
     def abort(self):
         print("> 💔  Prueba abortada...")
         util.line(ansi.YELLOW, Rars.WIDTH)
-        print()
+        print(ansi.DEFAULT)
         self.ok = False
 
     # ──────────────────────────────────────────────────────────────────────
@@ -809,7 +809,7 @@ class Rars:
 
         util.line(ansi.YELLOW, Rars.WIDTH)
 
-        print()
+        print(ansi.DEFAULT)
         # -- Debug: Mostrar la salida estandar
         # if Rars.stdout:
         #    print("SALIDA programa:\n", Rars.stdout)
