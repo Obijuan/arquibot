@@ -515,6 +515,54 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 16: OK")
 
+    def test_stdout_5(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # -- Valor esperado para la cadena
+            CAD0_ESPERADA = "Test..."
+
+            # -- Preparar el contexto
+            test = Rars(
+                        "asm/test-string1.s",  # -- Main
+                        expected_data=True,    # -- Segmento de datos
+                      )
+
+            Rars.print_section("Comprobando cadenas")
+
+            # -- Comprobar cadena destino
+            test.check_string(0, CAD0_ESPERADA, var_name="Cadena 0")
+
+            # -- Terminar
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ Hay segmento de datos"
+            MSG2 = "✅️ Hay segmento de código"
+            MSG3 = '✅️ Cadena 0: "Test..."'
+            MSG4 = "✅️ Se termina con EXIT"
+            MSG5 = "Instrucciones totales: 2"
+            MSG6 = "Ciclos de ejecución: 1"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+            self.assertIn(MSG3, salida)
+            self.assertIn(MSG4, salida)
+            self.assertIn(MSG5, salida)
+            self.assertIn(MSG6, salida)
+
+            # ── Comprobar que rars no ha fallado
+            self.assertTrue(test.ok)
+
+        print("✅ Test 17: OK")
+
 
 if __name__ == "__main__":
     unittest.main()

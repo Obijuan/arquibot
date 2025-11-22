@@ -111,3 +111,21 @@ test16.check_console_output(salidas_esperadas)
 
 # ── Terminar
 test16.exit()
+
+print("═════════════ TEST 17 ════════════════════════")
+# -- Preparar el contexto
+test17 = Rars(
+            "asm/test-string1.s",  # -- Main
+            expected_data=True,    # -- Segmento de datos
+          )
+
+# -- Valor esperado para la cadena
+CAD0_ESPERADA = "Test..."
+
+Rars.print_section("Comprobando cadenas")
+
+# -- Comprobar cadena destino
+test17.check_string(0, CAD0_ESPERADA, var_name="Cadena 0")
+
+# -- Terminar
+test17.exit()
