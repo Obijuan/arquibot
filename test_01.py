@@ -515,7 +515,7 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 16: OK")
 
-    def test_stdout_5(self):
+    def test_string_1(self):
 
         # ── Comprobar la salida estándar
         with patch('sys.stdout', new=StringIO()) as stdout:
@@ -562,6 +562,58 @@ class TestRars(unittest.TestCase):
             self.assertTrue(test.ok)
 
         print("✅ Test 17: OK")
+
+    def test_string_2(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # -- Preparar el contexto
+            test = Rars(
+                "asm/test-string2.s",  # -- Main
+                expected_data=True,    # -- Segmento de datos
+            )
+
+            # -- Valores esperados para las cadena
+            CAD0_ESPERADA = "Cadena 0"
+            CAD1_ESPERADA = "Cadena 1"
+            Rars.print_section("Comprobando cadenas")
+
+            # -- Comprobar cadenas
+            # -- Se pasa el offset y el valor esperado
+            test.check_string(0, CAD0_ESPERADA, var_name="Cad0")
+            test.check_string(9, CAD1_ESPERADA, var_name="Cad1")
+
+            # -- Terminar
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ Hay segmento de datos"
+            MSG2 = "✅️ Hay segmento de código"
+            MSG3 = '✅️ Cad0: "Cadena 0"'
+            MSG4 = '✅️ Cad1: "Cadena 1"'
+            MSG5 = "✅️ Se termina con EXIT"
+            MSG6 = "Instrucciones totales: 2"
+            MSG7 = "Ciclos de ejecución: 1"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+            self.assertIn(MSG3, salida)
+            self.assertIn(MSG4, salida)
+            self.assertIn(MSG5, salida)
+            self.assertIn(MSG6, salida)
+            self.assertIn(MSG7, salida)
+
+            # ── Comprobar que rars no ha fallado
+            self.assertTrue(test.ok)
+
+        print("✅ Test 18: OK")
 
 
 if __name__ == "__main__":
