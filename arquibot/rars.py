@@ -50,9 +50,6 @@ class Rars:
     # ── ciclos
     ciclos = 0
 
-    # ── Registros
-    regs = []
-
     # ── Numero de instrucciones
     instrucciones = 0
 
@@ -105,6 +102,9 @@ class Rars:
         self.stderr = ""
         self.stdout = ""
 
+        # ── Registros
+        self.regs = []
+
         # ── Mostrar el encabezado
         Rars.show_header()
 
@@ -150,13 +150,10 @@ class Rars:
 
         # ---- Leer la salida del Rars para obtener los registros y los ciclos
         # ---- Actualiza Rars.ciclos y Rars.regs
-        Rars.process_output()
+        self.process_output()
 
         # -- Analizar el segmento de codigo
         Rars.process_code()
-
-        # -- Comprobar como se ha realizado la salida del programa
-        Rars.check_exit()
 
         # -- Leer todas las variables del segmento de datos
         Rars.read_variables()
@@ -349,8 +346,8 @@ class Rars:
         # --  Salida: mensajes emitidos por el programa ensamblador
         # --  error: Mensajes emitidos por el RARs (informativos o
         # --         de error)
-        Rars.stdout = resultado.stdout
-        Rars.stderr = resultado.stderr
+        self.stdout = resultado.stdout
+        self.stderr = resultado.stderr
 
     # ────────────────────────────────────────────────────────────
     # ── CHECK_runtime_error.  Comprobar los errores en tiempo
@@ -361,7 +358,7 @@ class Rars:
         # -- Comprobar si hay runtime error
         patron = r"Error in .*/([^/]+)\sline\s(\d+): "\
                 r"Runtime exception at (0x[0-9a-fA-F]+): (.+)"
-        resultado = re.search(patron, Rars.stderr)
+        resultado = re.search(patron, self.stderr)
 
         if resultado:
             print("> ❌️ ERROR en tiempo de ejecución. Ha PETADO 😱️😱️")
@@ -401,7 +398,7 @@ class Rars:
         patron = r"Warning in .*/[^/]+\sline\s+(\d+)\s+column\s+\d+:\s+(.*)"
 
         # Buscar el patrón en la cadena
-        coincidencia = re.search(patron, Rars.stderr)
+        coincidencia = re.search(patron, self.stderr)
 
         if coincidencia:
             print(f"> ⚠️  {ansi.YELLOW}WARNING: {ansi.DEFAULT}"
@@ -414,7 +411,7 @@ class Rars:
 
         # -- Detectar errores
         patron = r"Error in .*/[^/]+\sline\s(\d+).+: (.+)"
-        resultado = re.search(patron, Rars.stderr)
+        resultado = re.search(patron, self.stderr)
         if resultado:
             Rars.print_error("El programa NO ensambla 😱️😱️")
             linea = resultado.group(1)
@@ -526,31 +523,29 @@ class Rars:
     # ────────────────────────────────────────────────────────────
     # ── READ_REGS. Leer los registros
     # ────────────────────────────────────────────────────────────
-    @staticmethod
-    def read_regs():
-        return Rars.regs
+    def read_regs(self):
+        return self.regs
 
     # ──────────────────────────────────────────────────────────────────────
     # ── PROCESS_OUTPUT. Procesar la salida del RARs (NO la del programa)
     # ── A partir de esta salida se determina si la salida se ha realizado
     # ── llamando a exit, el número de ciclos y los registros
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def process_output():
+    def process_output(self):
 
         # -- Obtener la salida de error del RARs
         # -- como una lista. Una linea en cada posicion
-        contenido = Rars.stderr.strip().split("\n")
+        contenido = self.stderr.strip().split("\n")
         # print(contenido)
 
         # -- Leer los ciclos
         # -- Se encuentran en la linea 2
         try:
-            Rars.ciclos = int(contenido[2])
+            self.ciclos = int(contenido[2])
         except ValueError:
             # -- Si hay error en su lectura,
             # -- ponemos los ciclos a 0
-            Rars.ciclos = 0
+            self.ciclos = 0
 
         # -- Lectura de los registros
         # -- Los registros empiezan en la linea 3
@@ -563,7 +558,7 @@ class Rars:
             # -- almacenarlo
             try:
                 x_str = val.split("\t")[1]
-                Rars.regs.append(int(x_str, 16))
+                self.regs.append(int(x_str, 16))
             except IndexError:
                 # -- Lo parseado no es un registro
                 # -- es un mensaje diferente
@@ -593,15 +588,14 @@ class Rars:
     # ── CHECK_EXIT. Comprobar la terminacion del programa
     # ── y emitir los mensajes de error correspondientes
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def check_exit():
+    def check_exit(self):
         # --- Comprobar si el programa no termina de forma controlada
-        if "dropping off" in Rars.stderr:
+        if "dropping off" in self.stderr:
             Rars.print_error("No hay EXIT")
             Rars.errors = True
 
         # --- Comprobar si el programa termina con normalidad, llamando a EXIT
-        if "calling exit" in Rars.stderr:
+        if "calling exit" in self.stderr:
             print("> ✅️ Se termina con EXIT")
 
     # ──────────────────────────────────────────────────────────────────────
@@ -640,12 +634,11 @@ class Rars:
     # ── SHOW_CONSOLE_OUTPUT(). Imprimir la salida en la consola
     # ── Función de depuración
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def show_console_output():
+    def show_console_output(self):
 
         Rars.print_section("Salida en consola")
-        if Rars.stdout:
-            print(Rars.stdout)
+        if self.stdout:
+            print(self.stdout)
 
     # ──────────────────────────────────────────────────────────────────────
     # ── CHECK_CONSOLE_OUTPUT. Comprobar si la salida de la consola es la
@@ -656,21 +649,20 @@ class Rars:
     # ──       imprime como esperada es la primera (que se considera la
     # ──         que debería ser)
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def check_console_output(posible_outputs: list[str]):
+    def check_console_output(self, posible_outputs: list[str]):
 
         Rars.print_section("Comprobando salida en consola")
 
         # -- Comprobar salida del programa
-        if Rars.stdout in posible_outputs:
-            print(f"{ansi.GREEN}{Rars.stdout}{ansi.DEFAULT}")
+        if self.stdout in posible_outputs:
+            print(f"{ansi.GREEN}{self.stdout}{ansi.DEFAULT}")
             print("> ✅️ ¡Salida exacta!")
         else:
             Rars.errors = True
             print(f'>  {ansi.GREEN}Salida esperada{ansi.DEFAULT}: \n'
                   f'"{posible_outputs[0]}"')
             print(f'>  {ansi.RED}Salida generada{ansi.DEFAULT}: \n'
-                  f'"{Rars.stdout}"')
+                  f'"{self.stdout}"')
             print("> ❌️ Salida NO exacta")
 
     # ──────────────────────────────────────────────────────
@@ -771,6 +763,9 @@ class Rars:
     def exit(self):
 
         Rars.print_section("Comprobaciones finales")
+
+        # -- Comprobar como se ha realizado la salida del programa
+        self.check_exit()
 
         # -- Mostrar informacion
         print(f"> Instrucciones totales: {Rars.instrucciones}")

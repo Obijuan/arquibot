@@ -14,3 +14,6 @@ test5 = Rars("asm/test-data-1word.s", expected_data=True)
 test6 = Rars("asm/test-data-syntax-error.s", expected_data=True)
 test7 = Rars("asm/test-data-syntax-error2.s", expected_data=True)
 test8 = Rars("asm/test-data-syntax-error3.s", expected_data=True)
+
+test9 = Rars("asm/test-text-1inst.s", expected_data=True)
+test9.exit()

@@ -39,7 +39,7 @@ Rars.check_string(0, CAD_DESTINO_ESPERADA, var_name="Destino")
 Rars.check_string(10, CAD_ORIGEN_ESPERADA, var_name="Origen")
 
 # -- Comprobar la salida del programa
-Rars.check_console_output(SALIDA_ESPERADA)
+test.check_console_output(SALIDA_ESPERADA)
 
 
 # -- Terminar
