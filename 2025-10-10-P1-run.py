@@ -5,6 +5,11 @@ from arquibot.rars import Rars
 #    MAIN
 # ───────────────────────────────────────
 
+# -- Preparar el contexto
+test = Rars("asm/2025-10-10-P1-AC-Teleco-calculo-sol.s",
+            expected_data=True,
+            bonus=10)
+
 # -- Valores esperados para las variables
 data_ok = {
     "a": 10,
@@ -12,12 +17,7 @@ data_ok = {
     "f": 36
 }
 
-# -- Preparar el contexto
-Rars("asm/2025-10-10-P1-AC-Teleco-calculo-sol.s",
-     expected_data=True,
-     bonus=10)
-
-Rars.check_variables(data_ok)
+test.check_variables(data_ok)
 
 # -- Terminar
-Rars.exit()
+test.exit()

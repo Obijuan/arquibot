@@ -5,6 +5,16 @@ from arquibot.rars import Rars
 #    MAIN
 # ───────────────────────────────────────
 
+# -- Preparar el contexto
+test = Rars(
+      "asm/2025-11-13-P2-AC-Teleco-copyupper.s",    # -- Main
+      "asm/so.s",           # -- Include
+      expected_data=True,   # -- Segmento de datos
+      input="hola\n",  # -- Entrada estandar
+      tipo_bonus=Rars.BONUS_CICLOS,
+      bonus=59
+    )
+
 # -- Valores esperados para las cadenas
 CAD_ORIGEN_ESPERADA = "hola\n"
 CAD_DESTINO_ESPERADA = "HOLA"
@@ -19,16 +29,6 @@ SALIDA_ESPERADA = [
     "Introduce una cadena de prueba:\nCadena copiada y convertida:HOLA",
     "Introduce la cadena de prueba: Cadena copiada y convertida: HOLA",
 ]
-
-# -- Preparar el contexto
-test = Rars(
-      "asm/2025-11-13-P2-AC-Teleco-copyupper.s",    # -- Main
-      "asm/so.s",           # -- Include
-      expected_data=True,   # -- Segmento de datos
-      input="hola\n",  # -- Entrada estandar
-      tipo_bonus=Rars.BONUS_CICLOS,
-      bonus=59
-    )
 
 Rars.print_section("Comprobando cadenas")
 

@@ -70,8 +70,8 @@ class Rars:
         self.expected_data = expected_data
         self.input = input
         self.include_asm = include
-        Rars.tipo_bonus = tipo_bonus
-        Rars.bonus = bonus
+        self.tipo_bonus = tipo_bonus
+        self.bonus = bonus
 
         # ── Estado del test
         self.ok = False
@@ -777,28 +777,28 @@ class Rars:
 
         # -- Comprobar BONUS
         # -- Solo si no hay errores previos
-        if not self.errors and Rars.bonus > 0:
+        if not self.errors and self.bonus > 0:
             print("> Comprobando BONUS...")
             ok_bonus = False
 
             # -- Comprobar los bonus segun el tipo
-            if Rars.tipo_bonus == Rars.BONUS_INSTRUCCIONES:
+            if self.tipo_bonus == Rars.BONUS_INSTRUCCIONES:
 
                 # -- Comprobar instrucciones
-                if self.instrucciones <= Rars.bonus:
-                    print(f"  > ✅️ Máximo de {Rars.bonus} instrucciones")
+                if self.instrucciones <= self.bonus:
+                    print(f"  > ✅️ Máximo de {self.bonus} instrucciones")
                     ok_bonus = True
                 else:
-                    print(f"  > ❌️ Más de {Rars.bonus} instrucciones...")
+                    print(f"  > ❌️ Más de {self.bonus} instrucciones...")
 
-            if Rars.tipo_bonus == Rars.BONUS_CICLOS:
+            if self.tipo_bonus == Rars.BONUS_CICLOS:
 
                 # -- Comprobar ciclos
-                if self.ciclos <= Rars.bonus:
-                    print(f"  > ✅️ Máximo de {Rars.bonus} ciclos")
+                if self.ciclos <= self.bonus:
+                    print(f"  > ✅️ Máximo de {self.bonus} ciclos")
                     ok_bonus = True
                 else:
-                    print(f"  > ❌️ Más de {Rars.bonus} ciclos...")
+                    print(f"  > ❌️ Más de {self.bonus} ciclos...")
 
             # -- Comprobacion final de Bonus
             if ok_bonus:

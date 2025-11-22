@@ -5,6 +5,12 @@ from arquibot.rars import Rars
 #    MAIN
 # ───────────────────────────────────────
 
+
+# -- Preparar el contexto
+test = Rars("asm/2025-10-20-P1-ASA-II-term.s",
+            expected_data=True,
+            bonus=11)
+
 # -- Valores esperados para las variables
 data_ok = {
     "var0": 0xCAFEBACA,
@@ -13,19 +19,14 @@ data_ok = {
     "c": 57
 }
 
-# -- Preparar el contexto
-Rars("asm/2025-10-20-P1-ASA-II-term.s",
-     expected_data=True,
-     bonus=11)
-
-Rars.check_variables(data_ok)
+test.check_variables(data_ok)
 
 # -- Comprobar que se ha usado el registro x9
-reg_x9_ok = Rars.regs[9] == 57
+reg_x9_ok = test.regs[9] == 57
 if reg_x9_ok:
-    print(f"> ✅️ Registro x9: {Rars.regs[9]}")
+    print(f"> ✅️ Registro x9: {test.regs[9]}")
 else:
-    Rars.print_error("Valor incorrecto en registro x9")
+    test.print_error("Valor incorrecto en registro x9")
 
 # -- Terminar
-Rars.exit()
+test.exit()
