@@ -97,3 +97,17 @@ test15.check_console_output(salidas_esperadas)
 
 # ── Terminar
 test15.exit()
+
+print("═════════════ TEST 16 ════════════════════════")
+test16 = Rars("asm/test-consola-out2.s", expected_data=True)
+
+salidas_esperadas = [
+    "Test...",
+    "Test...\n"
+]
+
+# ── Comprobar la salida de la consola
+test16.check_console_output(salidas_esperadas)
+
+# ── Terminar
+test16.exit()
