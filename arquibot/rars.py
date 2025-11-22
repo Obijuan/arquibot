@@ -761,6 +761,10 @@ class Rars:
     # ──────────────────────────────────────────────────────────────────────
     def exit(self):
 
+        # -- Si la ejecución se había abortado, no hacer nada
+        if not self.ok:
+            return
+
         Rars.print_section("Comprobaciones finales")
 
         # -- Comprobar como se ha realizado la salida del programa
