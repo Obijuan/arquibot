@@ -8,7 +8,4 @@ from arquibot.rars import Rars
 # ─────────────────────────────────────────────────
 
 # ── Comenzar la comprobación
-Rars("asm/data-syntax-error2.s", expected_data=True)
-
-# ── Terminar
-Rars.exit()
+Rars("asm/test-data-syntax-error2.s", expected_data=True)
