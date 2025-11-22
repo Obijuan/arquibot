@@ -12,10 +12,10 @@ salidas_esperadas = [
 ]
 
 # ── Comenzar la comprobación
-Rars("asm/consola-out1.s", expected_data=True)
+test = Rars("asm/test-consola-out1.s", expected_data=True)
 
 # ── Comprobar la salida de la consola
-Rars.check_console_output(salidas_esperadas)
+test.check_console_output(salidas_esperadas)
 
 # ── Terminar
-Rars.exit()
+test.exit()

@@ -46,3 +46,19 @@ test13.show_console_output()
 
 # ── Terminar
 test13.exit()
+
+# ────────── TEST 14 ────────────────
+# ── Comenzar la comprobación
+test14 = Rars("asm/test-consola-out1.s", expected_data=True)
+
+# ── Salida esperada para la consola
+# ── Es la salida correcta
+salidas_esperadas = [
+    "Test..."
+]
+
+# ── Comprobar la salida de la consola
+test14.check_console_output(salidas_esperadas)
+
+# ── Terminar
+test14.exit()
