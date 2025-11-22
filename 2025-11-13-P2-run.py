@@ -21,7 +21,7 @@ SALIDA_ESPERADA = [
 ]
 
 # -- Preparar el contexto
-Rars(
+test = Rars(
       "asm/2025-11-13-P2-AC-Teleco-copyupper.s",    # -- Main
       "asm/so.s",           # -- Include
       expected_data=True,   # -- Segmento de datos
@@ -43,4 +43,4 @@ Rars.check_console_output(SALIDA_ESPERADA)
 
 
 # -- Terminar
-Rars.exit()
+test.exit()

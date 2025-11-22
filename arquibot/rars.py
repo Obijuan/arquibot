@@ -768,8 +768,7 @@ class Rars:
     # ──────────────────────────────────────────────────────────────────────
     # ── EXIT. Terminar. Mostrar las instrucciones, ciclos y bonus
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def exit():
+    def exit(self):
 
         Rars.print_section("Comprobaciones finales")
 
@@ -784,7 +783,7 @@ class Rars:
 
         # -- Comprobar BONUS
         # -- Solo si no hay errores previos
-        if not Rars.errors and Rars.bonus > 0:
+        if not self.errors and Rars.bonus > 0:
             print("> Comprobando BONUS...")
             ok_bonus = False
 
