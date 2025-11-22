@@ -254,6 +254,39 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 9: OK")
 
+    def test_exit(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # ── Programa con una variable y una unica instruccion
+            test = Rars("asm/test-text-exit.s", expected_data=True)
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ Hay segmento de datos"
+            MSG2 = "✅️ Hay segmento de código"
+            MSG3 = "✅️ Se termina con EXIT"
+            MSG4 = "Instrucciones totales: 3"
+            MSG5 = "Ciclos de ejecución: 2"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+            self.assertIn(MSG3, salida)
+            self.assertIn(MSG4, salida)
+            self.assertIn(MSG5, salida)
+
+            # ── Comprobar rars no ha fallado
+            self.assertTrue(test.ok)
+
+        print("✅ Test 10: OK")
+
 
 if __name__ == "__main__":
     unittest.main()
