@@ -9,6 +9,3 @@ from arquibot.rars import Rars
 
 # ── Comenzar la comprobación
 Rars("asm/data-syntax-error.s", expected_data=True)
-
-# ── Terminar
-Rars.exit()

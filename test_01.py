@@ -145,6 +145,34 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 5: OK")
 
+    def test_data_syntax_error(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # ── Error sintáctico en el segmento de datos
+            test = Rars("asm/test-data-syntax-error.s", expected_data=True)
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            WARN = "⚠️  WARNING: Problemas con el ensamblado 😱️😱️"
+            ERROR1 = "❌️ ERROR: No hay segmento de DATOS"
+            ERROR2 = "❌️ ERROR: No hay segmento de CODIGO!"
+
+            self.assertIn(WARN, salida)
+            self.assertIn(ERROR1, salida)
+            self.assertIn(ERROR2, salida)
+
+            # ── Comprobar rars falla
+            self.assertFalse(test.ok)
+
+        print("✅ Test 6: OK")
+
 
 if __name__ == "__main__":
     unittest.main()
