@@ -20,3 +20,6 @@ test9.exit()
 
 test10 = Rars("asm/test-text-exit.s", expected_data=True)
 test10.exit()
+
+test11 = Rars("asm/test-text-syntax-error.s", expected_data=True)
+test11.exit()

@@ -287,6 +287,30 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 10: OK")
 
+    def test_syntax_error(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            # ── Programa con una variable y una unica instruccion
+            test = Rars("asm/test-text-syntax-error.s", expected_data=True)
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            ERROR1 = "❌️ ERROR: El programa NO ensambla 😱️😱️"
+            self.assertIn(ERROR1, salida)
+
+            # ── Comprobar rars ha fallado
+            self.assertFalse(test.ok)
+
+        print("✅ Test 11: OK")
+
 
 if __name__ == "__main__":
     unittest.main()
