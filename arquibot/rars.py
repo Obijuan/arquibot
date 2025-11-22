@@ -47,9 +47,6 @@ class Rars:
     # ── Numero de bytes a volcar del segmento de datos
     DATA_SIZE = 256
 
-    # ── Numero de instrucciones
-    instrucciones = 0
-
     # ── Variables
     variables = []
 
@@ -102,6 +99,9 @@ class Rars:
         # ── ciclos
         self.ciclos = 0
 
+        # ── Numero de instrucciones
+        self.instrucciones = 0
+
         # ── Registros
         self.regs = []
 
@@ -153,7 +153,7 @@ class Rars:
         self.process_output()
 
         # -- Analizar el segmento de codigo
-        Rars.process_code()
+        self.process_code()
 
         # -- Leer todas las variables del segmento de datos
         Rars.read_variables()
@@ -569,14 +569,13 @@ class Rars:
     # ── PROCESS_CODE. Procesar el segmento de codigo
     # ── Se actualiza el numero de instrucciones
     # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def process_code():
+    def process_code(self):
         # -- Leer el fichero del codigo
         try:
             with open(Rars.TEXT, "r") as code_file:
                 contenido = code_file.read()
                 code = contenido.strip().split("\n")
-                Rars.instrucciones = len(code)
+                self.instrucciones = len(code)
 
         except FileNotFoundError:
             # -- No hay segmento de codigo
@@ -768,7 +767,7 @@ class Rars:
         self.check_exit()
 
         # -- Mostrar informacion
-        print(f"> Instrucciones totales: {Rars.instrucciones}")
+        print(f"> Instrucciones totales: {self.instrucciones}")
         print(f"> Ciclos de ejecución: {self.ciclos}")
 
         # -- Comprobar si se superan los ciclos máximo
@@ -786,7 +785,7 @@ class Rars:
             if Rars.tipo_bonus == Rars.BONUS_INSTRUCCIONES:
 
                 # -- Comprobar instrucciones
-                if Rars.instrucciones <= Rars.bonus:
+                if self.instrucciones <= Rars.bonus:
                     print(f"  > ✅️ Máximo de {Rars.bonus} instrucciones")
                     ok_bonus = True
                 else:
