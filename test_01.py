@@ -740,6 +740,48 @@ class TestRars(unittest.TestCase):
 
         print("✅ Test 21: OK")
 
+    def test_input_1(self):
+
+        # ── Comprobar la salida estándar
+        with patch('sys.stdout', new=StringIO()) as stdout:
+
+            test = Rars(
+                "asm/test-input1.s",  # -- Main
+                "asm/servicios.s",    # -- Include
+
+                # -- Simular texto introducido por el usuario
+                input="Test"
+            )
+            # -- Comprobar si el texto introducido esta en la memoria
+            test.check_string(0, "Test\n", var_name="cad")
+            test.exit()
+
+            # ── Obtener la salida
+            salida = stdout.getvalue()
+
+            # ── Limpiar la salida de secuencias ANSI
+            salida = self.limpiar_ansi(salida)
+
+            # ──────── Comprobar que la salida es la esperada
+            MSG1 = "✅️ asm/test-input1.s existe"
+            MSG2 = "✅️ asm/servicios.s existe"
+            MSG3 = "☑️  Hay segmento de datos"
+            MSG4 = "✅️ Hay segmento de código"
+            MSG5 = '✅️ cad: "Test\\n"'
+            MSG6 = "✅️ Se termina con EXIT"
+
+            self.assertIn(MSG1, salida)
+            self.assertIn(MSG2, salida)
+            self.assertIn(MSG3, salida)
+            self.assertIn(MSG4, salida)
+            self.assertIn(MSG5, salida)
+            self.assertIn(MSG6, salida)
+
+            # ── Comprobar que rars no ha fallado
+            self.assertTrue(test.ok)
+
+        print("✅ Test 22: OK")
+
 
 if __name__ == "__main__":
     unittest.main()
