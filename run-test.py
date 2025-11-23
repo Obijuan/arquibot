@@ -2,19 +2,32 @@
 from arquibot.rars import Rars
 
 
-print("═════════════ TEST 22 ════════════════════════")
+# -- Preparar el contexto
 test = Rars(
-         "asm/test-input1.s",  # -- Main
-         "asm/servicios.s",    # -- Include
+      "asm/sep.s",    # -- Main
+      "asm/system.s",           # -- Include
+      expected_data=True,   # -- Segmento de datos
+      input="test*\n",  # -- Entrada estandar
+      tipo_bonus=Rars.BONUS_CICLOS,
+      bonus=64
+    )
 
-         # -- Simular texto introducido por el usuario
-         input="Test"
-       )
+# -- Valores esperados para las cadenas
+CAD_ORIGEN_ESPERADA = "test*\n"
 
-Rars.print_section("Comprobando variables")
+# -- Valores esperados para la salida en consola
+SALIDA_ESPERADA = [
+    "Escribe una palabra: Caracteres: t-e-s-t-*\nd",
+]
 
-# -- Comprobar si el texto introducido esta en la memoria
-test.check_string(0, "Test\n", var_name="cad")
+Rars.print_section("Comprobando cadenas")
+
+# -- Comprobar Cadena origen
+test.check_string(0, CAD_ORIGEN_ESPERADA, var_name="Origen")
+
+# -- Comprobar la salida del programa
+test.check_console_output(SALIDA_ESPERADA)
+
 
 # -- Terminar
 test.exit()

@@ -652,6 +652,10 @@ class Rars:
 
         self.print_section("Comprobando salida en consola")
 
+        # -- Eliminar saltos de linea para mostrar en consola
+        salida_esperada = posible_outputs[0].replace("\n", "\\n")
+        salida_generada = self.stdout.replace("\n", "\\n")
+
         # -- Comprobar salida del programa
         if self.stdout in posible_outputs:
             print(f"{ansi.GREEN}{self.stdout}{ansi.DEFAULT}")
@@ -659,9 +663,9 @@ class Rars:
         else:
             self.errors = True
             print(f'>  {ansi.GREEN}Salida esperada{ansi.DEFAULT}: \n'
-                  f'"{posible_outputs[0]}"')
+                  f'"{salida_esperada}"')
             print(f'>  {ansi.RED}Salida generada{ansi.DEFAULT}: \n'
-                  f'"{self.stdout}"')
+                  f'"{salida_generada}"')
             print("> ❌️ Salida NO exacta")
 
     # ──────────────────────────────────────────────────────
