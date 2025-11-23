@@ -127,6 +127,17 @@ class Rars:
         # -- Ejecutar el Rars!
         self.exec()
 
+        # -- Comprobar si hay runtime error
+        # -- Lo suyo seria comprobar primero si hay errores de ensamblado,
+        # -- pero al ejecutar se realizan las dos operaciones a la vez:
+        # -- ensamblar y ejecutar. El mensaje de error es común, pero en
+        # -- el caso de runtime error, el mensaje contiene la palabra clave
+        # -- "Runtime exception". Por eso se comprueba primero este tipo
+        # -- de error
+        ok = self.check_runtime_error()
+        if not ok:
+            return
+
         # -- Comprobar si es un error de ensamblado
         ok = self.check_asm_errors()
         if not ok:
@@ -139,11 +150,6 @@ class Rars:
 
         # --- Comprobar si se ha generado el segmento de codigo
         ok = self.check_text()
-        if not ok:
-            return
-
-        # -- Comprobar si hay runtime error
-        ok = self.check_runtime_error()
         if not ok:
             return
 

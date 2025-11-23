@@ -17,17 +17,18 @@ CAD_ORIGEN_ESPERADA = "test*\n"
 
 # -- Valores esperados para la salida en consola
 SALIDA_ESPERADA = [
-    "Escribe una palabra: Caracteres: t-e-s-t-*\nd",
+    "Escribe una palabra: Caracteres: t-e-s-t-*\n",
 ]
 
-Rars.print_section("Comprobando cadenas")
+if test.ok:
 
-# -- Comprobar Cadena origen
-test.check_string(0, CAD_ORIGEN_ESPERADA, var_name="Origen")
+    Rars.print_section("Comprobando cadenas")
 
-# -- Comprobar la salida del programa
-test.check_console_output(SALIDA_ESPERADA)
+    # -- Comprobar Cadena origen
+    test.check_string(0, CAD_ORIGEN_ESPERADA, var_name="Origen")
 
+    # -- Comprobar la salida del programa
+    test.check_console_output(SALIDA_ESPERADA)
 
-# -- Terminar
-test.exit()
+    # -- Terminar
+    test.exit()
