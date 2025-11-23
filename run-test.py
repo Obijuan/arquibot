@@ -11,6 +11,8 @@ test = Rars(
          input="Test"
        )
 
+Rars.print_section("Comprobando variables")
+
 # -- Comprobar si el texto introducido esta en la memoria
 test.check_string(0, "Test\n", var_name="cad")
 

@@ -253,20 +253,22 @@ class Rars:
     # ── el volcado el segmento de datos
     # ──────────────────────────────────────────────────
     @staticmethod
-    def delete_data():
+    def delete_data(verbose: bool = False):
         if os.path.exists(Rars.DATA):
             os.remove(Rars.DATA)
-            print(f"🧹️Eliminado {Rars.DATA} antiguo")
+            if verbose:
+                print(f"🧹️Eliminado {Rars.DATA} antiguo")
 
     # ──────────────────────────────────────────────────
     # ── DELETE_TEXT.  Borrar el archivo donde esta
     # ── el volcado el segmento de codigo
     # ──────────────────────────────────────────────────
     @staticmethod
-    def delete_text():
+    def delete_text(verbose: bool = False):
         if os.path.exists(Rars.TEXT):
             os.remove(Rars.TEXT)
-            print(f"🧹️Eliminado {Rars.TEXT} antiguo")
+            if verbose:
+                print(f"🧹️Eliminado {Rars.TEXT} antiguo")
 
     # ──────────────────────────────────────────────────
     # ── CHECK_MAIN_ASM.  Comprobar si el fichero asm
@@ -810,9 +812,3 @@ class Rars:
         util.line(ansi.YELLOW, Rars.WIDTH)
 
         print(ansi.DEFAULT)
-        # -- Debug: Mostrar la salida estandar
-        # if Rars.stdout:
-        #    print("SALIDA programa:\n", Rars.stdout)
-
-        # print(f"{ansi.WHITE}Pulsa ENTER...")
-        # input()
