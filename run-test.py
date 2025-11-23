@@ -18,6 +18,7 @@ CAD_ORIGEN_ESPERADA = "test*\n"
 # -- Valores esperados para la salida en consola
 SALIDA_ESPERADA = [
     "Escribe una palabra: Caracteres: t-e-s-t-*\n",
+    "Ecribe una palabra: Caracteres: t-e-s-t-*\n",
 ]
 
 if test.ok:
