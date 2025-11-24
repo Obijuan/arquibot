@@ -4,7 +4,7 @@ from arquibot.rars import Rars
 
 # -- Preparar el contexto
 test = Rars(
-      "asm/sep.s",    # -- Main
+      "asm/2025-11-19-P2-ASA-II-sep.s",    # -- Main
       "asm/system.s",           # -- Include
       expected_data=True,   # -- Segmento de datos
       input="test*\n",  # -- Entrada estandar
