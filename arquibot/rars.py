@@ -339,6 +339,9 @@ class Rars:
         # -- Probando fichero fuente
         print(f"> Probando: {self.main_asm}")
 
+        # -- Obtener una cadena con las dependencias
+        deps = " ".join(self.deps)
+
         # -- Comando a ejecutar
         cmd_str = f"java -jar {Rars.NAME} "\
                   f"x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 "\
@@ -347,6 +350,9 @@ class Rars:
                   f"nc me ic {Rars.MAX_STEPS} "\
                   f"dump 0x10010000-0x{data_end:x} HexText {Rars.DATA} "\
                   f"dump .text HexText {Rars.TEXT} {self.main_asm}"
+
+        # -- Añadir las dependencias
+        cmd_str += deps
 
         # -- Convertirlo a lista, colocando cada argumento en un item
         # -- Necesario para ejecutar el comando con subprocess.run()
