@@ -301,9 +301,8 @@ class Rars:
         for fich in self.deps:
             if os.path.exists(fich):
                 print(f"> ✅️ {fich} existe")
-                return True
             else:
-                self.print_error(f"{ansi.YELLOW}{self.main_asm}{ansi.LWHITE}"
+                self.print_error(f"{ansi.YELLOW}{fich}{ansi.LWHITE}"
                                  " no encontrado", violation=True)
                 self.abort()
                 return False
