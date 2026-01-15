@@ -8,7 +8,7 @@ import arquibot.ansi as ansi
 
 
 # ── VERSION DE ARQUITBOT
-VERSION = 0.4
+VERSION = 0.5
 
 
 # ──────────────────────────────────────────
@@ -60,6 +60,7 @@ class Rars:
     def __init__(self,
                  main: str,
                  include: str = "",
+                 deps: list = [],
                  expected_data: bool = False,
                  input: str = "",
                  tipo_bonus: int = BONUS_INSTRUCCIONES,
@@ -72,6 +73,7 @@ class Rars:
         self.include_asm = include
         self.tipo_bonus = tipo_bonus
         self.bonus = bonus
+        self.deps = deps
 
         # ── Estado del test
         self.ok = False
@@ -116,6 +118,11 @@ class Rars:
 
         # --- Comprobar si el fichero asm existe
         ok = self.check_main_asm()
+        if not ok:
+            return
+
+        # --- Comprobar si existen las dependencias
+        ok = self.check_deps()
         if not ok:
             return
 
@@ -289,6 +296,18 @@ class Rars:
                              " no encontrado", violation=True)
             self.abort()
             return False
+
+    def check_deps(self) -> bool:
+        for fich in self.deps:
+            if os.path.exists(fich):
+                print(f"> ✅️ {fich} existe")
+                return True
+            else:
+                self.print_error(f"{ansi.YELLOW}{self.main_asm}{ansi.LWHITE}"
+                                 " no encontrado", violation=True)
+                self.abort()
+                return False
+        return True
 
     # ──────────────────────────────────────────────────
     # ── CHECK_INCLUDE_ASM.  Comprobar si el fichero
