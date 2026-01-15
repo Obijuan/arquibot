@@ -352,7 +352,8 @@ class Rars:
                   f"dump .text HexText {Rars.TEXT} {self.main_asm}"
 
         # -- Añadir las dependencias
-        cmd_str += deps
+        if deps:
+            cmd_str = cmd_str + ' ' + deps
 
         # -- Convertirlo a lista, colocando cada argumento en un item
         # -- Necesario para ejecutar el comando con subprocess.run()
