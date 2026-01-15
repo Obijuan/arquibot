@@ -676,13 +676,15 @@ class Rars:
     # ──       imprime como esperada es la primera (que se considera la
     # ──         que debería ser)
     # ──────────────────────────────────────────────────────────────────────
-    def check_console_output(self, posible_outputs: list[str]):
+    def check_console_output(self, posible_outputs: list[str],
+                             verbose: bool = True) -> bool:
 
         # -- Si la ejecución se había abortado, no hacer nada
         if not self.ok:
-            return
+            return False
 
-        self.print_section("Comprobando salida en consola")
+        if verbose:
+            self.print_section("Comprobando salida en consola")
 
         # -- Eliminar saltos de linea para mostrar en consola
         salida_esperada = posible_outputs[0].replace("\n", "\\n")
@@ -690,15 +692,19 @@ class Rars:
 
         # -- Comprobar salida del programa
         if self.stdout in posible_outputs:
-            print(f"{ansi.GREEN}{self.stdout}{ansi.DEFAULT}")
-            print("> ✅️ ¡Salida exacta!")
+            if verbose:
+                print(f"{ansi.GREEN}{self.stdout}{ansi.DEFAULT}")
+                print("> ✅️ ¡Salida exacta!")
+            return True
         else:
             self.errors = True
-            print(f'>  {ansi.GREEN}Salida esperada{ansi.DEFAULT}: \n'
-                  f'"{salida_esperada}"')
-            print(f'>  {ansi.RED}Salida generada{ansi.DEFAULT}: \n'
-                  f'"{salida_generada}"')
-            print("> ❌️ Salida NO exacta")
+            if verbose:
+                print(f'>  {ansi.GREEN}Salida esperada{ansi.DEFAULT}: \n'
+                      f'"{salida_esperada}"')
+                print(f'>  {ansi.RED}Salida generada{ansi.DEFAULT}: \n'
+                      f'"{salida_generada}"')
+                print("> ❌️ Salida NO exacta")
+            return False
 
     # ──────────────────────────────────────────────────────
     # ── LOAD_BYTE(off)
