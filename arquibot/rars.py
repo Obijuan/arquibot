@@ -796,6 +796,14 @@ class Rars:
         self.ok = False
 
     # ──────────────────────────────────────────────────────────────────────
+    # ── CLOSE_LINE. Imprimir la linea de cierre
+    # ──────────────────────────────────────────────────────────────────────
+    @staticmethod
+    def close_line():
+        util.line(ansi.YELLOW, Rars.WIDTH)
+        print(ansi.DEFAULT)
+
+    # ──────────────────────────────────────────────────────────────────────
     # ── EXIT. Terminar. Mostrar las instrucciones, ciclos y bonus
     # ──────────────────────────────────────────────────────────────────────
     def exit(self):
@@ -850,6 +858,4 @@ class Rars:
             else:
                 print("  > No conseguidos...")
 
-        util.line(ansi.YELLOW, Rars.WIDTH)
-
-        print(ansi.DEFAULT)
+        self.close_line()
