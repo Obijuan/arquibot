@@ -8,7 +8,7 @@ import arquibot.ansi as ansi
 
 
 # ── VERSION DE ARQUITBOT
-VERSION = 0.5
+VERSION = 0.6
 
 
 # ──────────────────────────────────────────
